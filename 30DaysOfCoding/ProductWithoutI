@@ -1,0 +1,17 @@
+const arr = [1, 2, 3];
+
+const productWithOutI = (arr) => {
+  const result = [];
+  const total = arr.reduce((acc, curr) => {
+   acc *=  curr;
+   return acc;
+  });
+  
+  arr.forEach((item) => {
+    result.push(total/item);
+  });
+  
+  return result;
+}
+
+productWithOutI(arr);
