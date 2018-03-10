@@ -1,0 +1,32 @@
+const fnOne = function (x) {
+  console.log("calculating!");
+  return x + 5;
+};
+
+const memoizeFunc = function(func, hasher) {
+  let cache = {};
+    const memoize = function(key) {
+      if(cache.hasOwnProperty(key)){
+        console.log(cache[key]);
+        return cache[key];
+      } else {
+        const answer = func.apply(this, arguments);
+        cache[key] = answer;
+        console.log(answer)
+        return answer;
+      }
+    };
+    return memoize;
+};
+const memoizedFoo = memoizeFunc(fnOne);
+
+memoizedFoo(5);
+// calculating!
+// 10
+
+memoizedFoo(5);
+// 10 (notice how 'calculating!' is not printed this time)
+
+memoizedFoo(10);
+// calculating!
+// 15
