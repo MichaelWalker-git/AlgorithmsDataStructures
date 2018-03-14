@@ -1,0 +1,50 @@
+serialize(root){
+  let result = "";
+  
+  if(root === null){
+    return;
+  }
+  
+  const recurseOverTree = (root) => {
+    if(root){
+      recurseOverTree(root.left, 'left');
+      recurseOverTree(root.right, 'right');
+      result += `${root.value},`;
+    } else {
+      result +=  `#`;
+    }
+  }
+  recurseOverTree(root);
+  return result.subString(0, (result.length-2));
+}
+
+serialize(root);
+
+deserialize(string){
+  if(!string){
+    return '';
+  }
+  
+  const nodes = string.split(',');
+  let index = 0
+  
+  // @param {!Node} root
+  // @param {!Array<number>} nodes
+  const rebuild = (nodes) => {
+    if(nodes[index]=== '#'){
+      return null;
+    }
+    
+    root = new Node(nodes[index]);
+    index += 1;
+    root.left += rebuild(nodes);
+    index += 1;
+    root.right += rebuild(nodes);
+    return root;
+  }
+  
+  return rebuild(nodes);
+}
+
+
+
