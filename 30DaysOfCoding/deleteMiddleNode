@@ -1,0 +1,10 @@
+deleteMiddleNode(middleNode){
+  if(!middleNode || middleNode.next === null){
+    return false;
+  }
+  
+  const nextValue = middleNode.next;
+  middleNode.value = nextValue.value;
+  middleNode.next = nextValue.next;
+  return true;
+}
