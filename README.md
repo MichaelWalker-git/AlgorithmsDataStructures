@@ -2,10 +2,10 @@
 
 A collection of problems that I have solved. 
 
-Sources:
+## Sources:
 
-Hack Reactor Collection
-CTCI
-HackerRank
-LeetCode
-DailyCodingProblems (https://www.dailycodingproblem.com/)
+- Hack Reactor Collection
+- CTCI
+- HackerRank
+- LeetCode
+- DailyCodingProblems (https://www.dailycodingproblem.com/)
