@@ -1,0 +1,38 @@
+Alphabet Inventory
+Given an alphabet and a string of text, write a method that tallies the count of each letter defined in said alphabet (case insensitive), then return the result of this tally.
+
+Examples
+Input	Output
+alphabet:
+"aBc"
+text:
+"aabbccdd"	"a:2,b:2,c:2"
+alphabet:
+"x"
+text:
+"Racer X is my friend :)"	"x:1"
+alphabet:
+"123"
+text:
+"o hai"	"no matches"
+
+function alphaCount (alphabet, text) {
+  const targets = alphabet.toLowerCase().split('');
+  const letterMap = new Map();
+  let results = '';
+  text.toLowerCase().split('').forEach((letter) => {
+    const c = letterMap.has(letter) ? (letterMap.get(letter)) + 1 : 1;
+    letterMap.set(letter, c);
+  });
+  targets.forEach((letter, index) => {
+    if(letterMap.has(letter)){
+      results += `${letter}:${letterMap.get(letter)},`
+    }
+  })
+  return (results) ? results.substr(0, results.length-1) : 'no matches';
+}
+
+const alphabet = "x"
+const text = "Racer X is my friend :)"
+
+alphaCount(alphabet, text);
