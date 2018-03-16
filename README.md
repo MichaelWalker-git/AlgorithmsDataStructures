@@ -1,5 +1,11 @@
-# HackerRankProblems
+# Algorithms and Data Structures
 
 A collection of problems that I have solved. 
 
-I will also utilize LEETCODE
+Sources:
+
+Hack Reactor Collection
+CTCI
+HackerRank
+LeetCode
+DailyCodingProblems (https://www.dailycodingproblem.com/)
