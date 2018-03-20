@@ -1,0 +1,33 @@
+Given a circular linked list, implement an algorithm that returns the node at the beginning of the loop.
+
+Definition: Circular linked list: A corrupt linked list in which a node next pointer points to an earlier node, so as to make a loop in the linked list.
+
+Thought Process:
+
+// Tortoise and the Hare => Use of a runner to detect the loop, because at some point, if it is a loop A(slow) and B (fast) will collide.
+
+function loopDetector(head){
+  let tort = head;
+  let hare = head;
+  
+  while(tort !== null && hare !== null){
+    if(tort === hare){
+      break;
+    }
+    
+    tort = tort.next;
+    hare = hare.next.next;
+  }
+  
+  if(tort === null || hare === null){
+    return null;
+  }
+  
+  tort = slow;
+  while(tort !== hare){
+    tort = tort.next;
+    hare = hare.next;
+  }
+  
+  return hare;
+}
