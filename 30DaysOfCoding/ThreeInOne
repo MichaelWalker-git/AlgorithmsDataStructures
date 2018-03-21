@@ -79,3 +79,81 @@ class ThreeInOne {
     }
   }
 }
+
+
+// second approach
+
+Divide the array into three equal parts and allow the individual stack to grow in that limited space.
+
+class FixedMultiStack {
+  const numberOfStacks = 3;
+  let stackCapacity;
+  let values = [];
+  let sizes = [];
+  
+  @param {number} stackSize 
+  const FixedMultiStack = (stackSize) => {
+    stackCapacity = stackSize;
+    values = new Array(stackSize * numberOfStacks);
+    sizes = new Array(numberofStacks)
+  }
+  
+  //Push value onto stack
+  @param {number} stackNum
+  @param {number} value
+  const push = (stackNum, value) => {
+    // Check if we have space for the next element
+    if(isFull(stackNum)){
+      throw new exception('Full Stack')
+    }
+    sizes[stackNum]++;
+    values[indexOfTop(stackNum)] = value;
+  }
+  
+  // Pop item off the top of the stack
+  @param {number} stackNum
+  const pop = (stackNum) => {
+    if(isEmpty(stackNum)){
+      throw new EmptyStackException();
+    }
+    
+    topIndex = indexOfTop(stackNum);
+    value = values[topIndex]; // Get Top
+    values[topIndex] = 0; // Clear
+    sizes[stackNum] -- ; // Shrink
+    return value;
+  }
+  
+  // Return top element
+  @param {number} stackNum
+  const peek = (stackNum) => {
+    if(isEmpty(stackNum)){
+      throw new EmptyStackException()
+    }
+    return values[indexOfTop(stackNum);
+  }
+  
+  //Return if stack is empty 
+  @param {number} stackNum
+  function isEmpty(stackNum){
+    return sizes[stackNum] === 0;
+  }
+  
+  // REturn if stack is full
+  @param {number} stackNum
+  function isFull(stackNum){
+    return sizes[stackNum] == stackCapacity;
+  }
+  
+  // Return index of the top of the stack
+  @param {number} stackNum
+  function indexOfTop(stackNum){
+    const offset = stacknum * stackCapacity;
+    const size = sizes[stackNum];
+    return offset + size - 1;
+  }
+}
+
+
+
+
