@@ -1,0 +1,21 @@
+Add a method that would return the min value of a stack in O(1) time.
+
+// keep track of lowest number upon push 
+
+// edge case: when we pop that number... are there duplicates?
+
+class StackMin {
+  let minValue;
+  let stack = [];
+  
+  push = (val) => {
+    stack.push(val);
+    minValue = (!minValue) ? val : (minValue > val) ? val : minValue;
+  }
+  
+  pop = () => {
+    stack.pop();
+  }
+  
+  min = () => minValue; 
+}
