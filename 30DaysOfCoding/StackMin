@@ -19,3 +19,9 @@ class StackMin {
   
   min = () => minValue; 
 }
+
+
+// Above violates the O(1) rule method for all methods.
+
+// We can assign the previous min to the new min.
+
