@@ -1,0 +1,81 @@
+Describe how you can use a single array to demonstrate three stacks.
+
+Thought process: Each stack will lie in a quadrant of the main array. Important pointers will be the end of the stack.
+The pointers will be assigned upon the insertion method.
+
+//first approach
+class ThreeInOne {
+  const mainStack = [];
+  let stack1End = null;
+  let stack2End = null;
+  let stack3End = null;
+  
+  pushNewVal = (val, stackLabel) => {
+    switch(stackLabel){
+      case stack1:
+        if(!stack1End){
+          mainStack.unshift(val);
+          stack1End = 0;
+        } else {
+          mainStack.splice(stack1End, 0, val);
+          stack1End++;
+        }
+        stack2End = (stack2End) ? stack2End++ : null;
+        stack3End = (stack3End) ? stack3End++ : null;
+        break;
+      case stack2:
+        if(!stack2End){
+          if(!stack1End){
+            mainStack.unshift(val);
+            stack2End = 0;
+          } else {
+            // There is a stack1End
+            mainStack.splice(stack1End, 0, val);
+            stack2End = stack1End + 1;
+          }
+        } else {
+          mainStack.splice(stack2End, 0, val);
+          stack2End++;
+        }
+        stack3End = (stack3End) ? stack3End++ : null;
+        break;
+      case stack3:
+        if(!stack3End){
+          mainStack.push(val);
+          stack1End = mainStack.length - 1;
+        } else {
+          mainStack.splice(stack3End, 0, val);
+          stack3End++;
+        }
+        break;
+    }
+  }
+  
+  removeFromStack(stackLabel){
+    switch(stackLabel){
+      case stack1:
+        if(!stack1End){
+          throw exception;
+        } else {
+          mainStack.splice(stack1End, 1);
+        }
+        stack2End = (stack2End) ? stack2End-- : null;
+        stack3End = (stack3End) ? stack3End-- : null;
+        break;
+      case stack2:
+        if(!stack2End){
+          throw exception;
+        } else {
+          mainStack.splice(stack2End, 1);
+        }
+        stack3End = (stack3End) ? stack3End-- : null;
+        break;
+      case stack3:
+        if(!stack3End){
+          throw exception;
+        }
+        mainStack.splice(stack3End, 1);
+        break;
+    }
+  }
+}
