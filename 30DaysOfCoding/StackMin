@@ -29,14 +29,15 @@ class StackWithMin extends Stack {
   const mins = [];
   
   push = (val) => {
-    if(!mins.length || val < mins[mins.length -1]){
+    if(!mins.length || val < mins()){
       mins.push(val)
     }
     super.push(val);
   }
   
   pop = () => {
-    if(super.pop() === mins[mins.length -1]){
+    const end = super.pop();
+    if(end === mins()){
       mins.pop();
     }
   }
