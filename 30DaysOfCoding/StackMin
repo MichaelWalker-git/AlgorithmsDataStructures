@@ -23,5 +23,26 @@ class StackMin {
 
 // Above violates the O(1) rule method for all methods.
 
-// We can assign the previous min to the new min.
+// 2nd Attempt
+
+class StackWithMin extends Stack {
+  const mins = [];
+  
+  push = (val) => {
+    if(!mins.length || val < mins[mins.length -1]){
+      mins.push(val)
+    }
+    super.push(val);
+  }
+  
+  pop = () => {
+    if(super.pop() === mins[mins.length -1]){
+      mins.pop();
+    }
+  }
+  
+  showMin = () => {
+    return (!mins.length) ?  "Error" : "mins.peek()";
+  }
+}
 
