@@ -10,7 +10,7 @@
 #### SetOfStacks.push() and SetOfStacks.pop() should behave identically to a single stack 
 #### (that is, pop() should return the same values as it would if there were just in a single stack.)
 
-
+```
 class StackOfPlates extends Stack {
   let limit;
   let currentStackCount;
@@ -41,13 +41,15 @@ class StackOfPlates extends Stack {
   }
 }
 
-
+```
 ### Follow Up
 
 #### Implement a function popAt(index) @param {number} index which performs a pop operation on a specific sub-stack. 
 
-// Thinking is take Math.floor(index / capacity) => subStack index
 
+Attempt #1
+// Thinking is take Math.floor(index / capacity) => subStack index
+```
 class subPop extends StackOfPlates {
   
   // @param {number} index
@@ -57,7 +59,123 @@ class subPop extends StackOfPlates {
   }
 }
 
-
-
+```
+ 
+ EDIT: Attempt 1 fails to accound for a rollover system. For example: If we pop an element from substack 2, it needs to roll over the first value from substack 3.
+ 
+ However, if we discuss the tradeoff of this feature vs. time complexity, then it can be okay. 
+ 
+ Full implementation here:
+ 
+ ```
+ 
+ class SetOfStacks {
+   const stacks = [];
+   let capacity;
+   
+   setOfStacks = (capacity) => {
+    this.capacity = capacity;
+   }
+   
+   getLastStack = () => {
+    if (stacks.length === 0) return  null;
+    return stacks[stacks.length -1)];
+   }
+   
+   push = (val) => {
+     const last = getLastStack();
+     if(last !== null && !last.isFull()){
+       last.push(v);
+     } else {
+       const stack = [];
+       stack.push(val);
+       stacks.push(stack);
+     }
+   }
+   
+   pop = () => {
+     const last = getLastStack();
+     if(last === null) throw error;
+     let val = last.pop();
+     if(last.size === 0){
+       stacks.pop();
+     }
+     return v;
+   }
+   
+   popAt = (index) => {
+     return leftShift(index, true);
+   }
+   
+   leftShift = (index, removeTop) => {
+     stack = stacks[index];
+     let removed_item;
+     if(removeTop){
+       removed_item = stack.pop();
+     } else {
+       removed_item = stack.removeBottom();
+     }
+     if(stack.isEmpty()){
+       stacks.pop();
+     } else if(stacks.size() > index + 1){
+      int v = leftShift(index + 1, false);
+      stack.push(v);
+     }
+     return removed_item;
+   }
+ }
+ 
+ class Stack {
+   let capacity;
+   let top;
+   let bottom;
+   let size = 0;
+   
+   Stack = (capacity) => {
+     this.capacity = capacity;
+   }
+   
+   isFull = () => capacity === size;
+   
+   join = (above, below) => {
+     if(below !== null) below.above = above;
+     if(above !== null) above.below = below;
+   }
+   
+   push = (val) => {
+    if(size >= capacity) return false;
+    size++;
+    n = new Node(v);
+    if(size === 1) bottom = n;
+    join(n, top);
+    top = n;
+    return true;
+   }
+   
+   pop = () => {
+     const t = top;
+     top = top.below;
+     size--;
+     return t.value;
+   }
+   
+   isEmpty = () => {
+     return size === 0;
+   }
+   
+   removeBottom = () => {
+     let b = bottom;
+     bottom = bottom.above;
+     if(bottom !== null){
+       bottom.below === null;
+     }
+     size--;
+     retun b.value
+   }
+   
+ }
+ 
+ ```
+ 
 
 
