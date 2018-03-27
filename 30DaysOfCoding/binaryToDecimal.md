@@ -1,4 +1,4 @@
-** Convert binary numbers to decimals.
+** Given a number n (represented as a binary number string), convert n to base 10. Do NOT use parseInt(n, 2). You may use the parseInt function that takes in just one argument.
 
 ```
 binaryToDecimal = (n) => {
