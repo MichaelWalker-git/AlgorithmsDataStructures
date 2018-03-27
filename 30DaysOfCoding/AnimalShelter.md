@@ -81,7 +81,7 @@
 ```
 
 The other approach is to maintain two different queues. When dequeuingAny(), we would peek into those two values and compare timestamps.
-
+```
 class Animal {
   let order;
   let name;
@@ -133,11 +133,7 @@ class AnimalQueue {
   deQueueCat = () => {
     return cats.deQueue();
   }
-  
-  // We can also use the native JS library for timestamps and if there is an exact match, we randomize
-  
-  
-  
-  
-  
 }
+```
+  // We can also use the native JS library for timestamps and if there is an exact match, we randomize
+
