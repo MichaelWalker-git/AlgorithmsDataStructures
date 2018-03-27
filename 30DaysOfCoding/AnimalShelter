@@ -1,4 +1,4 @@
-AnimalShelter extends Queue {
+```AnimalShelter extends Queue {
   let pound;
   let catMin;
   let dogMin;
@@ -77,4 +77,67 @@ AnimalShelter extends Queue {
       dogMin = count + 1;
     }
   }
+}
+```
+
+The other approach is to maintain two different queues. When dequeuingAny(), we would peek into those two values and compare timestamps.
+
+class Animal {
+  let order;
+  let name;
+  
+  class Animal = (name) = {
+    this.name = name;
+  } 
+  
+  setOrder = (ord) => {
+    this.order = ord;
+  }
+  
+  getOrder = () => this.order;
+ 
+  setType = (ty) => {
+    this.type = ty;
+  }
+  
+  getType = () => this.type;
+}
+
+class AnimalQueue {
+  const dogs = new LinkedList();
+  const cats = new LinkedList();
+  let order = 0;
+  
+  enqueue = (an) => {
+    an.setOrder(order);
+    order++;
+    if(an.getType() === 'dog'){
+      dogs.addLast(an);
+    } else {
+      cats.addLast(an);
+    }
+  }
+  
+  deQueueAny = () => {
+    if(dogs.Size() === 0 || cats.Size() === 0){
+      return (dogs.Size() === 0) ? cats.deQueue() : dogs.deQueue();
+    }
+  
+    return (dogs.peek() > cats.peek()) ? dogs.deQueue()  : cats.deQueue();
+  }
+  
+  deQueueDog = () => {
+    return dogs.deQueue();
+  }
+  
+  deQueueCat = () => {
+    return cats.deQueue();
+  }
+  
+  // We can also use the native JS library for timestamps and if there is an exact match, we randomize
+  
+  
+  
+  
+  
 }
