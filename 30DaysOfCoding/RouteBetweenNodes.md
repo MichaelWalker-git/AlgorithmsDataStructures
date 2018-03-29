@@ -30,7 +30,7 @@ search = (root, target) => {
   }
 }
 ```
-*** CTCI solution in JS
+***CTCI solution in JS
 ```
 const search = (graph, start, target) => {
   if(start === target){ 
