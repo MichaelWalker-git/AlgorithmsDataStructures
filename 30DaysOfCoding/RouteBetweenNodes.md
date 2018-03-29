@@ -30,3 +30,33 @@ search = (root, target) => {
   }
 }
 ```
+*** CTCI solution in JS
+```
+const search = (graph, start, target) => {
+  if(start === target){ 
+    return true;
+  } 
+  const q = new Queue();
+  for( u of graph){
+    u.visited = false;
+  }
+  start.visited = true;
+  q.enQueue(start);
+  while(!q.isEmpty()){
+    const n = q.deQueue();
+    if(n !== null){
+      n.getAdjacents().forEach((node) => {
+        if(!node.visited){
+          if(node === target){
+            return true;
+          } else {
+            node.visited = true;
+            q.enQueue(node);
+          }
+        }
+      })
+    }
+    n.visited = true;
+  }
+}
+```
