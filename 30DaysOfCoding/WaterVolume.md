@@ -22,7 +22,20 @@ heights:
 [ 1, 2, 3, 4, 0, 5, 3, 1 ]	4
 ```
 
-## Attempt #1
+## My approach
+
+#Thinking:
+Need a left side.
+Need a right side.
+
+height = Math.min(left, right);
+width = (heights[right] - heights[left]) - 1;
+--------------------------------------------
+Total - (blocks between) => Volume
+
+Repeat for areas
+
+
 ```
 
 const arr = [4,2,3];
@@ -31,16 +44,9 @@ function volume (heights) {
   let leftSide = heights[0];
   
   for(let i = 1; i < heights.length; i++){
-    if(heights[i] <= leftSide){
-      diff += (leftSide - heights[i]);
-    } else {
-      diff -= heights[i];
-      leftSide = heights[i];
-    }
+
   }
   return diff;
 }
-
-
 volume(arr)
 ```
