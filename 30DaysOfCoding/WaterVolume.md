@@ -22,9 +22,25 @@ heights:
 [ 1, 2, 3, 4, 0, 5, 3, 1 ]	4
 ```
 
+## Attempt #1
 ```
-waterVolume = (heights) => {
 
+const arr = [4,2,3];
+function volume (heights) {
+  let diff = 0;
+  let leftSide = heights[0];
+  
+  for(let i = 1; i < heights.length; i++){
+    if(heights[i] <= leftSide){
+      diff += (leftSide - heights[i]);
+    } else {
+      diff -= heights[i];
+      leftSide = heights[i];
+    }
+  }
+  return diff;
 }
 
+
+volume(arr)
 ```
