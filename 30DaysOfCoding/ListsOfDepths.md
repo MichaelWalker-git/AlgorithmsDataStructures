@@ -48,7 +48,39 @@ ListsOfDepths = (root) => {
   
 }
 
+```
+** CTCI solution
+*Important that we know what level we are on.
+*Mutation of preorder traversal, passing level+1 on each recursive call.
 
 ```
+const createLevelLinkedList = (root) => {
+  /** @const {!Array<LinkedList<TreeNode>>}
+  const lists = [];
+  
+  createLevelLL = (root, lists, 0);
 
+  return lists;
+}
 
+const createLevelLL = (root, lists, level) => {
+  if(root === null) return; // base case
+  
+  /** @private {TreeNode} **/
+  let list_ = null;
+  
+  if(list.size() === level){
+    list = new LinkedList();
+    // levels are always traversed in order. If it is the 1st time, we visit level i,
+    // otherwise, we assume we have visited level - 1 already. Therefore, we can always
+    // safely add to the end of lists.
+    lists.add(list);
+  } else {
+    list_ = lists.get(level);
+  }
+  list.add(root);
+  createLevelLL(root.left, lists, level+1);
+  createLevelLL(root.right, lists, level+1);
+}
+
+```
