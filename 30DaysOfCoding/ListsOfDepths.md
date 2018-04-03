@@ -84,3 +84,33 @@ const createLevelLL = (root, lists, level) => {
 }
 
 ```
+* Iterative Approach
+```
+iterativeDepthFinder = (root) => {
+  /** {!Array<LinkedList<TreeNode>>} **/
+  const result  = [];
+  
+  let current = new LinkedList();
+  
+  if(root !== null){
+    current.add(root);
+  }
+  while(current.size !== 0){
+    result.add(current);
+    
+    const parents = current;
+    current = new LinkedList();
+    
+    for(let node in parents){
+      if(node.left){
+        current.add(node.left);
+      }
+      if(node.right){
+        current.add(node.right);
+      }
+    }
+  }
+  return result;
+}
+
+```
