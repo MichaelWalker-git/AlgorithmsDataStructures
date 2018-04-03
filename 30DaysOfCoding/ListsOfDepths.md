@@ -69,7 +69,7 @@ const createLevelLL = (root, lists, level) => {
   /** @private {TreeNode} **/
   let list_ = null;
   
-  if(list.size() === level){
+  if(lists.size() === level){
     list = new LinkedList();
     // levels are always traversed in order. If it is the 1st time, we visit level i,
     // otherwise, we assume we have visited level - 1 already. Therefore, we can always
