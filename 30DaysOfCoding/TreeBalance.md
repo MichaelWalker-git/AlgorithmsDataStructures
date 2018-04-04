@@ -63,3 +63,26 @@ const isBalanced = (root) => {
     return checkHeight(root) !== badValue;
 }
 ```
+** Optomized For Speed
+
+```
+const ans;
+
+const isBalanced = function(root) {
+    ans = true;
+    dfs(root);
+    return ans;
+};
+
+function dfs(root){
+    if(!root) return 0;
+    
+    const a = root.left ? dfs(root.left) : 0;
+    const b = root.right ? dfs(root.right) : 0;
+ 
+    if(Math.abs(a-b) >1){
+        ans = false;
+    }
+    return Math.max(a,b)+1;
+}
+```
