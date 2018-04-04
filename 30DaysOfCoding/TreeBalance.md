@@ -35,4 +35,31 @@ Return false.
 Can't be lopsided by more than one level. We can keep track by dividing the tree in half.
 Read left to right.
 
+```
+const badValue = -1;
+const checkHeight = (root) => {
+    if(root === null){
+        return badValue;
+    }
+    const leftHeight = checkHeight(root.left);
+    if(leftHeight === badValue){
+        return badValue;
+    }
+    
+    const rightHeight = checkHeight(root.right);
+    if(rightHeight === badValue){
+        return badValue;
+    }
+    
+    const heightDiff = leftHeight - rightHeight;
+    if(Math.abs(heightDiff) > 1){
+        return badValue;
+    } else {
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+}
 
+const isBalanced = (root) => {
+    return checkHeight(root) !== badValue;
+}
+```
