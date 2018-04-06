@@ -29,4 +29,31 @@ const result = [];
   validateResults();
   return true;
 }
+* Recursive approach
+```
+validateBST = (root) => {
+  if(root === null){
+    return error;
+  }
+  
+  return checkLess(root.left.value, root.left) && checkMore(root.right.value, root.right);
+  
+  function checkLess(leftValue, parentNode) {
+    if(!leftValue){
+      return;
+    }
+    
+    return (leftValue < parentNode) && (checkLess(leftValue.left, parentNode)) && (checkMore(leftValue.right, parentNode));
+  }
+  
+  function checkMore(rightValue, parentNode) {
+      if(!rightValue){
+      return;
+    }
+  
+    return (rightValue < parentNode) && (checkLess(rightValue.left, parentNode)) && (checkMore(rightValue.right, parentNode));
+  }  
+  
+}
+
 ```
