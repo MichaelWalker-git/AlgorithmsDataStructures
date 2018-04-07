@@ -35,10 +35,7 @@ validateBST = (root) => {
   if(root === null){
     return true;
   }
-  
   return checkLess(root.value, root.left) && checkMore(root.value, root.right);
-  
-  /**
   
   function checkLess(parentValue, currentNode) {
     if(!leftValue){
@@ -46,14 +43,10 @@ validateBST = (root) => {
     }
     return (currentNode.value < parentNode) && (checkLess(currentNode.value, currentNode.left)) && (checkMore(currentNode.value, currentNode.right));
   }
-  
-  /**
-  
   function checkMore(parentNode, currentNode) {
     if(!currentNode){return true;}
     return (currentNode.value > parentNode) && (checkLess(currentNode.value, currentNode.left)) &&            (checkMore(currentNode.value, currentNode.right));
   }  
-  
 }
 
 ```
