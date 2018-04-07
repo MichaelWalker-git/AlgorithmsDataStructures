@@ -51,3 +51,27 @@ validateBST = (root) => {
 }
 
 ```
+* Another approach 
+
+```
+validateBST = (root) => {
+  return checkTree(root, null, null);
+}
+
+function checkTree(root, min, max) {
+  if(root === null){
+    return true;
+  }
+  
+  if(min !== null && root.data < min || max !== null && root.data > max ){
+    return false;
+  }
+  
+  if(!checkTree(root.left, min, root.data) || !checkTree(root.right, root.data, max)){
+    return false;
+  }
+  
+  return true;
+}
+
+```
