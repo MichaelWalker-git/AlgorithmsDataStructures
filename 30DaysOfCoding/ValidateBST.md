@@ -29,6 +29,7 @@ const result = [];
   validateResults();
   return true;
 }
+```
 * Recursive approach
 ```
 validateBST = (root) => {
