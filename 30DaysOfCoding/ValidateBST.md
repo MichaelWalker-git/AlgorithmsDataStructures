@@ -33,25 +33,25 @@ const result = [];
 ```
 validateBST = (root) => {
   if(root === null){
-    return error;
+    return true;
   }
   
-  return checkLess(root.left.value, root.left) && checkMore(root.right.value, root.right);
+  return checkLess(root.value, root.left) && checkMore(root.value, root.right);
   
-  function checkLess(leftValue, parentNode) {
+  /**
+  
+  function checkLess(parentValue, currentNode) {
     if(!leftValue){
-      return;
+      return true;
     }
-    
-    return (leftValue < parentNode) && (checkLess(leftValue.left, parentNode)) && (checkMore(leftValue.right, parentNode));
+    return (currentNode.value < parentNode) && (checkLess(currentNode.value, currentNode.left)) && (checkMore(currentNode.value, currentNode.right));
   }
   
-  function checkMore(rightValue, parentNode) {
-      if(!rightValue){
-      return;
-    }
+  /**
   
-    return (rightValue < parentNode) && (checkLess(rightValue.left, parentNode)) && (checkMore(rightValue.right, parentNode));
+  function checkMore(parentNode, currentNode) {
+    if(!currentNode){return true;}
+    return (currentNode.value > parentNode) && (checkLess(currentNode.value, currentNode.left)) &&            (checkMore(currentNode.value, currentNode.right));
   }  
   
 }
