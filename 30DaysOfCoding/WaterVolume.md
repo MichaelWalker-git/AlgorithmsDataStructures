@@ -68,15 +68,26 @@ STEP-3
 The amount of water which each tower can hold is-
 
 (minimum height between highest right tower and highest left tower) – (height of tower)
-
+```
 calculateVolumeBetweenTowers = (arr) => {
-  let leftMax = [];
-  let rightMax = [];
-  let tempMax;
-  for(let i = 0; i < arr.length; i++){
-   
+  let total = 0
+  let maxIndex = arr.indexOf(Math.max(arr))
+
+  if(!arr){
+    return 0;
   }
-  for(let j = arr.length -1; j >= 0; j--){
+  let leftMax = arr[0];
+  for(let num = 1; num < maxIndex; num++){
+    total += leftMax - num;
+    leftMax = Math.max(leftMax, num);
+  }
   
+  let rightMax = arr[arr.length - 1];
+  for(let j = arr.length - 1; j >= maxIndex; j--){
+    total += rightMax - j;
+    rightMax = Math.max(rightMax, j);
   }
+  
+  return total;
 }
+```
