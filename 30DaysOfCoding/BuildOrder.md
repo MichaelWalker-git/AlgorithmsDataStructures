@@ -4,7 +4,6 @@
 ### Find a build order that will allow the projects to be built. If there is no valid build order, return an error. 
 
 ```
-
 EXAMPLE
 
 Input:
@@ -16,3 +15,10 @@ Input:
 
 ```
 
+Thought process:
+Directed graph representing the dependencies.
+Each node is a project, an an edge exists between A to B on A (A must be built before B).
+
+// f -> e (?) -> a / b -> d -> c
+
+ Depth first search is recommended, find last node and that will be the node where none are dependent on edge.
