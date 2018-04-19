@@ -29,3 +29,29 @@ However, we have two eggs! Therefore, D<sub> n - 1</sub> should be equal to 2, b
 
 Logic Proof:
 First egg: 99th floor -> (99-2 => 97) -> (97-3 => 94) -> (94-4 => 90) -> (90-5 => 85) -> (85-6 => 79) -> (79-7 => 72) -> (72-8 => 64) -> (9,55) -> (10,45) -> (11,34) -> (12,22) -> (13,9) ANSWER
+
+
+```
+@param {number} floorsLeft
+@param {number} nextFloor
+const maxThrows = (floorsLeft, nextFloor) => {
+  if(floorsLeft <= 2){
+    return floorsLeft;
+  } else {
+    return Math.max(nextFloor, bestMaxThrows(floorsLeft - nextFloor) + 1);
+  }
+}
+
+const bestMaxThrows = (floorsLeft) => {
+  return maxThrows(floorsLeft, bestNextStep(floorsLeft));
+}
+
+const bestNextStep = (floorsLeft) => {
+  if(floorsLeft <= 2){
+    return 1;
+  } else {
+    
+  }
+}
+
+```
