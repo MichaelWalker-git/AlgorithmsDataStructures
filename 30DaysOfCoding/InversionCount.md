@@ -31,6 +31,7 @@ const inversionFinder = (arr) => {
 ## Count the number of inversions in each list recursively
 ## Count the inversions between A and B
 ## Return the sum of all three counts
+```
 
 const countInversion = (arr) => {
   let count;
@@ -74,5 +75,5 @@ const mergeAndCount = (a, b) => {
   return count;
 }
 
-    
+    ```
     
