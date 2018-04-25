@@ -1,8 +1,11 @@
 ### Water Volume
-You are given an array of numbers that each represent the height of an adjoining building. During torrential rain, water collects in the spaces between buildings. What is the maximum amount of water collected by the buildings represented by the array?
+You are given an array of non-negative integers that represents a two-dimensional elevation map where each element is unit-width wall and the integer is the height. Suppose it will rain and all spots between two walls get filled up.
 
-Explanation:
-An input of [3,0,3] can be visualized as such:
+Compute how many units of water remain trapped on the map in O(N) time and O(1) space.
+
+For example, given the input [2, 1, 2], we can hold 1 unit of water in the middle.
+
+Given the input [3, 0, 1, 3, 0, 5], we can hold 3 units in the first index, 2 in the second, and 3 in the fourth index (we cannot hold 5 since it would run off to the left), so we can trap 8 units of water.
 ```
  __    __
 |  |//|  |
@@ -25,69 +28,35 @@ heights:
 ## My approach
 
 #Thinking:
-Need a left side.
-Need a right side.
-
-height = Math.min(left, right);
-width = (heights[right] - heights[left]) - 1;
---------------------------------------------
-Total - (blocks between) => Volume
-
-Repeat for areas
-
+- Iterate through.
+- First value, non-zero number is max
+- continue, until number is equal or greater
+   - Add first max
+   - Reset local max to 0
+   
 
 ```
+const buildings = [3, 0, 1, 3, 0, 5];
 
-const arr = [4,2,3];
-function volume (heights) {
-  let diff = 0;
-  let leftSide = heights[0];
+const trap = (heights) => {
+  let left = 0;
+  let right = heights.length - 1;
+  let leftMax = 0;
+  let rightMax = 0;
+  let ans = 0;
   
-  for(let i = 1; i < heights.length; i++){
-
+  while (left < right) {
+    if (heights[left] < heights[right]) {
+      heights[left] >= leftMax ? (leftMax = heights[left]) : ans += (leftMax - heights[left]);
+      left++;
+    } else {
+      heights[right] >= rightMax ? (rightMax = heights[right]) : ans += (rightMax - heights[right]);
+      right--;
+    }
   }
-  return diff;
-}
-volume(arr)
+  return ans;
+};
+
 ```
 
-Here we will be needing two extra arrays for holding height of highest tower to left on any tower say:
-`int leftMax[],
-int rightMax[]
-`
-STEP-1
 
-We make a left pass of the given array (i.e int tower[]),and will be maintaining a temporary maximum (say int tempMax) such that on each iteration height of each tower will be compared to tempMax, and if height of current tower is less than tempMax then tempMax will be set as highest tower to left of it, otherwise height of current tower will be assigned as the heighest tower to left and tempMax will be updated with current tower height,
-
-STEP-2
-
-We will be following above procedure only as discussed in STEP-1 to calculate highest tower to right BUT this times making a pass through array from right side.
-
-STEP-3
-
-The amount of water which each tower can hold is-
-
-(minimum height between highest right tower and highest left tower) – (height of tower)
-```
-calculateVolumeBetweenTowers = (arr) => {
-  let total = 0
-  let maxIndex = arr.indexOf(Math.max(arr))
-
-  if(!arr){
-    return 0;
-  }
-  let leftMax = arr[0];
-  for(let num = 1; num < maxIndex; num++){
-    total += leftMax - num;
-    leftMax = Math.max(leftMax, num);
-  }
-  
-  let rightMax = arr[arr.length - 1];
-  for(let j = arr.length - 1; j >= maxIndex; j--){
-    total += rightMax - j;
-    rightMax = Math.max(rightMax, j);
-  }
-  
-  return total;
-}
-```
