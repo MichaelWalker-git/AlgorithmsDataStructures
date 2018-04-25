@@ -38,25 +38,26 @@ heights:
 ```
 const buildings = [3, 0, 1, 3, 0, 5];
 
-const trap = (heights) => {
-  let left = 0;
-  let right = heights.length - 1;
+const trap = (arr) => {
+  let leftIndex = 0;
+  let rightIndex = arr.length - 1;
   let leftMax = 0;
   let rightMax = 0;
-  let ans = 0;
+  let result = 0;
   
-  while (left < right) {
-    if (heights[left] < heights[right]) {
-      heights[left] >= leftMax ? (leftMax = heights[left]) : ans += (leftMax - heights[left]);
-      left++;
+  while (leftIndex < rightIndex) {
+    if (arr[leftIndex] < arr[rightIndex]) {
+      arr[leftIndex] >= leftMax ? (leftMax = arr[left]) : result += (leftMax - arr[left]);
+      leftIndex++;
     } else {
-      heights[right] >= rightMax ? (rightMax = heights[right]) : ans += (rightMax - heights[right]);
-      right--;
+      arr[rightIndex] >= rightMax ? (rightMax = arr[rightIndex]) : result += (rightMax - arr[rightIndex]);
+      rightIndex--;
     }
   }
-  return ans;
+  return result;
 };
 
 ```
+
 
 
