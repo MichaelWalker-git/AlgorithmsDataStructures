@@ -6,6 +6,18 @@ get(key): gets the value at key. If no such key exists, return null.
 Each operation should run in O(1) time.
 
 ```
-
+const LRU = (key, value) => {
+  const cache = [];
+  const cacheMap = new Map();
+  if(cache.length === n) {
+    let key = cache.pop();
+    cacheMap.delete(key);
+  }
+  if(!cache.includes(key) || !cacheMap.has(key)){
+    return null;
+  }
+  cache.push(key);
+  cacheMap.set(key, value).
+}
 
 ```
