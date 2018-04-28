@@ -21,3 +21,91 @@ const LRU = (key, value) => {
 }
 
 ```
+
+
+Other solution:
+
+```
+class Node {
+    int = function(key, val){
+        this.key = key;
+        this.val = val;
+        this.prev = null;
+        this.next = null;
+    }
+}
+
+class LinkedList {
+    init = () => {
+        # dummy nodes
+        this.head = Node(None, 'head');
+        this.tail = Node(None, 'tail');
+        
+        # set up head <-> tail
+        this.head.next = this.tail;
+        this.tail.prev = this.head;
+    }
+
+    getHead = () => {
+        return this.head.next;
+    }
+
+    getTail = () => {
+        return this.tail.prev;
+    }
+
+    add = (node) => {
+        prev = this.tail.prev;
+        prev.next = node;
+        
+        node.prev = prev;
+        node.next = this.tail;
+        
+        this.tail.prev = node;
+    }
+
+    remove = (node) => {
+        prev = node.prev;
+        nxt = node.next;
+        
+        prev.next = nxt;
+        nxt.prev = prev;
+    }
+}
+
+class LRUCache {
+    init = (n) => {
+        this.n = n;
+        this.dict = {};
+        this.list = LinkedList();
+    }
+
+    set = (key, val) => {
+        if (this.dict.hasOwnProperty(key)){
+            delete this.dict[key];
+        }
+        
+        n = Node(key, val);
+        
+        this.list.add(n);
+        this.dict[key] = n;
+        
+        if (this.dict.length > this.n) {
+            head = this.list.getHead();
+            this.list.remove(head);
+            delete this.dict[head.key];
+        }
+
+    get = (key) => {
+        if (this.dict.hasOwnProperty(key)) {
+            n = this.dict[key];
+            
+            # bump to the back of the list by removing and adding the node
+            this.list.remove(n);
+            this.list.add(n);
+            return n.val;
+        }
+    }
+ }
+            
+    ```
