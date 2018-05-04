@@ -10,12 +10,14 @@ const findIndex = (arr, k) => {
   if(!k){
     return null;
   }
-  // add 5
-  // add 7 
-  // minus 23
-  // add 6
-  // add 2
-  const pattern = 
+
 }
 
 ```
+
+Approach:
+Since we know the array is sorted.
+The best approach would be to perform a binary search. However, we know that the array is also rotated a number of times. 
+
+Instead, we can will find the rotation point. 
+We will start in the middle. 
