@@ -6,24 +6,51 @@ For example, pow(2, 10) should return 1024.
 
 ```
 const repeatedPower = (a, b) => {
-  let first = a;
-  let second = b;
-  while(second > 1){
-    first *= a;
-    second--;
+  let base = a;
+  let exponent = b;
+  if(b < 0){
+    base = 1/ a;
+    exponent = -b;
+  } 
+  while(exponent > 1){
+    base *= a;
+    exponent--;
   }
-  return first;
+  return base;
 }
 
  repeatedPower(2, 10)
 ```
 
-Improved method 
+Improved method:
+
+We re-write x<sup>y</sup> as:
+
+if y = even, then x<sup>y</sup> = (x<sup>2</sup> )<sup>(y / 2)</sup> 
+
+
+if y = odd, then x<sup>y</sup> = (x<sup>2</sup> ) <sup>(y - (1/2)) </sup>
 
 ```
 const pow = (a, b) => {
-
-
+  let base = a;
+  let exponent = b;
+  if(b < 0){
+    base = 1/ a;
+    exponent = -b;
+  }
+  let coeff = 1;
+  while(y > 1){
+    if (y % 2 === 0) {
+      base *= base;
+      y /= 2;
+    } else {
+      coeff *= base;
+      base *= base;
+      y = (y - 1) / 2;
+    }
+  }
+  return base * coeff;
 }
 
 ```
