@@ -4,4 +4,9 @@ For example, given the multiset {15, 5, 20, 10, 35, 25, 10}, it would return tru
 
 Given the multiset {15, 5, 20, 10, 35}, it would return false, since we can't split it up into two subsets that add up to the same sum.
 
-We will be sending the solution tomorrow, along with tomorrow's question. As always, feel free to shoot us an email if there's anything we can help with.
+Thinking:
+Need to sum up all values first?
+
+Then subtract two items at a time from total sum.
+
+
