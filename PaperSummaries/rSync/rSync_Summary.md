@@ -5,7 +5,6 @@ Implement a file syncing algorithm for two computers over a low-bandwidth networ
 Problem: Alpha has file A and Beta has file B. Link between two is slow. Best way to transfer A to B, is to just transfer differences. However, usual reads require the computer to have access to both files simulanteously.
 
 rSync addresses this problem.
-```
 
 1.) Beta splites the file B into a series of non-overlapping fixed blocks of size S bytes. The last block may be shorter than S bytes.
 
@@ -17,7 +16,6 @@ rSync addresses this problem.
 
 5.) Alpha sends Beta a sequence of instructions for constructing a copy of Alpha. Each instruction is either a reference to a block fo Beta or literal data. Literal data is sent only for those sections of A which did not match any of the blocks of B.
 
-```
 
 The end result is that Beta gets a copy of A, but only the pieces of Alpha that are not found in Beta are sent over. (There is also a small amoung of data for checksums and block indexes). The algorithm also only requires one round trip whcih minimises the impact of the link latency.
 
