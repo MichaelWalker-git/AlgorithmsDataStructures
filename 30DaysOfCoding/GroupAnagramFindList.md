@@ -1,4 +1,5 @@
-```INPUT
+```
+INPUT
 anagrams(['xxy', 'cab', 'bca', 'cab', 'bac', 'dash', 'shad'])
 
 OUTPUT
@@ -6,7 +7,8 @@ OUTPUT
   ['xxy'],
   ['cab', 'bca’, 'bac'],
   ['dash', 'shad']
-]```
+]
+```
 
 Group strings that are anagram of each other into a list without duplicate.
 
@@ -21,6 +23,8 @@ abc and cab are anagrams because each of them has 1 a, 1 b, and 1 c
 You can assume it’s 256 ASCII
 
 You don’t need to compile the code, let me know when you’re done implementing the code. If you’re unsure about the syntax, just make it up. 
+
+
 
 ```
 @param {!Array<string>} stringArr
@@ -47,5 +51,19 @@ const groupAnagram = (stringArr) => {
 }
 
 groupAnagram(stringArr)
+
+```
+
+Optomized version:
+
+``` 
+const groupAnagrams = (input) {
+  const dict = {};
+  for(let str of new Set(input)) {
+    const alpha = str.split('').sort().join('');
+    dict[alpha] = dict[alpha] ? [...dict[alpha], str] : [str];
+  }
+  return Object.values(dict);
+}
 
 ```
