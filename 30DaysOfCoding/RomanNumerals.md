@@ -19,27 +19,44 @@ C can be placed before D (500) and M (1000) to make 400 and 900.
 Given a roman numeral, convert it to an integer. Input is guaranteed to be within the range from 1 to 3999.
 
 
-
+# SLOW
 ```
 /**
  * @param {string} s
  * @return {number}
  */
-var romanToInt = function(s) {
-    let number = 0;
-    let dictionary = {
-        I: 1
-        V: 5
-        X: 10
-        L: 50
-        C: 100
-        D: 500
-        M: 1000
+const romanToInt = (s)  => {
+    let result = 0;
+    let idx = 0;
+    const dictionary = {
+        I: 1,
+        V: 5,
+        X: 10,
+        L: 50,
+        C: 100,
+        D: 500,
+        M: 1000,
     };
+    const oneBefore =  new Set(['IV', 'IX','XL', 'XC', 'CD', 'CM']);
     const strArr = s.split('');
-    for(let i = 0; i< s.length; i++){
-        if()
+    
+    while(idx < s.length){
+       const weirdCombo = strArr.slice(idx, idx + 2).join('');
+
+       if(oneBefore.has(weirdCombo)){
+           const item = weirdCombo.split('');
+           result += (dictionary[item[1]] - dictionary[item[0]]);
+           idx += 2;
+       } else {
+           const poop = strArr.slice(idx, idx + 1);
+           result += Number(dictionary[poop]);
+           idx += 1;
+
+       }
     }
-    return number;
+
+    return result;
 };
+           
+           
 ```
