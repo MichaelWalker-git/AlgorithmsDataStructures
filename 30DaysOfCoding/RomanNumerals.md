@@ -56,7 +56,23 @@ const romanToInt = (s)  => {
     }
 
     return result;
-};
-           
-           
+};           
+```
+
+# Medium 
+
+```
+    const oneBefore =  new Set(['IV', 'IX','XL', 'XC', 'CD', 'CM']);
+    while(idx < s.length){
+       const weirdCombo = s.substr(idx, 2);
+       if(oneBefore.has(weirdCombo)){
+           const item = weirdCombo.split('');
+           result += (dictionary[item[1]] - dictionary[item[0]]);
+           idx += 2;
+       } else {
+           const poop = s.substr(idx, 1);
+           result += dictionary[poop];
+           idx += 1;
+       }
+    }
 ```
