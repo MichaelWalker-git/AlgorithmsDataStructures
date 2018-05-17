@@ -28,3 +28,40 @@ var isPalindrome = function(x) {
 };
 
 ```
+
+Faster: 
+```
+
+/**
+ * @param {number} x
+ * @return {boolean}
+ */
+var isPalindrome = function(x) {
+    if ( x < 0 ) {
+        return false;
+    }
+    const xCopy = x;
+    let xRev = 0;
+    
+    while(x !== 0) {   // x = 0; xRev = 12321
+        if (xRev > 0) {
+            xRev *= 10;
+        }
+        xRev += x % 10;
+        x = parseInt(x/10);
+    }
+    
+    return xCopy === xRev;
+};
+```
+
+Explanation:
+If x is less than 0, return false.
+while(x !== 0)
+  if xRev is greater than 0
+    then xRev = xRev multiplied by 10
+  else
+    xRev now equals (x divided by 10)
+    x = parseInt(x/10) // parses a string argument and returns an integer of the specified radix
+    
+test if xCopy(original number) === xRev
