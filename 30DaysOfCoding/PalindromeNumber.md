@@ -62,6 +62,8 @@ while(x !== 0)
     then xRev = xRev multiplied by 10
   else
     xRev now equals (x divided by 10)
-    x = parseInt(x/10) // parses a string argument and returns an integer of the specified radix
+    x = parseInt(x/10) // parses a string argument and returns an integer of the specified radix; 
+      // translation: if x is less than 0; makes it 0
     
 test if xCopy(original number) === xRev
+
