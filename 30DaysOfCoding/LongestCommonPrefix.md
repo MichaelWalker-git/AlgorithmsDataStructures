@@ -14,7 +14,7 @@ Explanation: There is no common prefix among the input strings.
 Note:
 
 All given inputs are in lowercase letters a-z.
-
+```
 /**
  * @param {string[]} strs
  * @return {string}
@@ -43,3 +43,29 @@ var longestCommonPrefix = function(strs) {
   return result;
 };
 ```
+
+Fastest Implementation:
+```
+/**
+ * @param {string[]} strs
+ * @return {string}
+ */
+var longestCommonPrefix = function(strs) {
+  
+  if(!strs.length) return '';
+  if(strs.length === 1) return strs[0];
+  
+  let prefix = strs[0];
+  
+  for(let i in strs) {
+    while(strs[i].indexOf(prefix) !== 0) {
+      prefix = prefix.substring(0, prefix.length - 1);
+      if(!prefix.length) return '';
+    }
+  }
+   return prefix; 
+};
+```
+
+Major difference:
+For loop - iterating over array instead of while(letterIndex <= smallestWordLength)
