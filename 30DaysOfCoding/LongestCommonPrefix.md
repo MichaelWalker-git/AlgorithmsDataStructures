@@ -69,3 +69,9 @@ var longestCommonPrefix = function(strs) {
 
 Major difference:
 For loop - iterating over array instead of while(letterIndex <= smallestWordLength)
+  While loop (only when word in array has prefix) 
+    reset prefix
+       prefix = prefix copy?
+    if prefix is empty string
+       return ''
+return prefix
