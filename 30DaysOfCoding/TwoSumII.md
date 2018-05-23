@@ -36,3 +36,25 @@ var twoSum = function(numbers, target) {
 };
 
 ```
+Even faster:
+```
+const twoSum = (numbers, target) => {
+  for(let i = 0; i< numbers.length; i++){
+    temp = numbers.indexOf(target-numbers[i], i +1);
+    // indexOf takes in two parameters, first is the value we are looking for, and second is the starting place in the array.
+    // in this case, we are looking for target - current number, starting at current number
+    if(temp !== undefined) return [i + 1, temp + 1]l
+  }
+}
+
+// Another fast attempt.
+var twoSum = function(numbers, target) {
+    const hashTable = {};
+    for(var i=0;i<numbers.length;i++){
+        const current = numbers[i];
+        if(hashTable[target - current]!==undefined){
+            return [hashTable[target-current]+1,i+1];
+        }
+        hashT[current] = i;
+    }
+};
