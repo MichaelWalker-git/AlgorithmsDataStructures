@@ -57,3 +57,43 @@ var isValid = function(s) {
 };
 
 ```
+
+Faster:
+
+```
+
+```
+
+Fastest:
+
+```
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+var isValid = function(s) {
+    var stack = [];
+    var open = {
+        '{': '}',
+        '[': ']',
+        '(': ')',
+    }
+    
+    var closed = {
+        '}': true,
+        ']': true,
+        ')': true,
+    }
+    
+    for (var i = 0; i < s.length; i++) {
+        var curr = s[i];
+        if (open[curr]) {
+            stack.push(curr);
+        } else if (closed[curr]) {
+            var last = stack.pop();
+            if (open[last] != curr) {
+                return false;
+            }
+        }
+    }
+```
