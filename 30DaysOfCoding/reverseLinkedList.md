@@ -44,3 +44,23 @@ var reverseList = function(head) {
 };
 
 ```
+
+Faster
+
+```
+const reverseList = (head) => {
+  if(head === null || head.next === null){
+   return head; 
+  }
+  let prev = null;
+  let curr = head;
+  
+  while(curr){
+    let nxt = curr.next;
+    curr.next = prev;
+    prev = curr;
+    curr = nxt;
+  }
+  return prev;
+}
+```
