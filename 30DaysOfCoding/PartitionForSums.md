@@ -9,4 +9,23 @@ Need to sum up all values first?
 
 Then subtract two items at a time from total sum.
 
+```
+const subset = [15, 5, 20, 10, 35];
+
+const findInterval = (subset) => {
+  const sum = subset.reduce((a, b) => {
+    return a += b;
+  }, 0);
+
+  for(let i = 0; i< subset.length; i++){
+    for(let j = i + 1; j < subset.length; j++){
+      if(subset[i] + subset[j] === (sum - (subset[i] + subset[j]))){
+        return true;
+      }
+    }
+  }
+  return false;
+}
+findInterval(subset);
+```
 
