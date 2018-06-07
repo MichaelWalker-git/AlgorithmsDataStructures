@@ -46,3 +46,33 @@ var arrangeCoins = function(n) {
     return i - 1;
 };
 ```
+
+
+Faster:
+
+```
+const arrangeCoins = () => {
+  let lo = 1;
+  let hi = n;
+  let mid;
+  while(lo <= hi){
+    mid = Math.floor((lo + hi)/2);
+    if((mid * (mid + 1)) / 2 <= n){
+      lo = mid + 1;
+    } else {
+      hi = mid - 1;
+    }
+  }
+  return lo - 1;
+}
+   var lo=1,hi=n,mid;
+    while(lo<=hi){
+        mid=Math.floor((lo+hi)/2);
+        if(mid*(mid+1)/2<=n){
+            lo=mid+1;
+        } else{
+            hi=mid-1;
+        }
+    }
+    return lo-1;
+```
