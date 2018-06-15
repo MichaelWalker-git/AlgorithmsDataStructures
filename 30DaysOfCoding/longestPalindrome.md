@@ -94,6 +94,4 @@ const longestPalindrome = (s) => {
 }
 
 
-
-
 ```
