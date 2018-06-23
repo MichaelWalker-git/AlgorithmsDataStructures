@@ -37,8 +37,30 @@ const findIndex = (inputArray, target) => {
     let rightSide = inputArray[inputArray.length - 1];
   }
   
+    /** 
+  * @param {!Array<number>} inputARray
+  * @return {number}
+  */ 
+  const findTarget = (sortedArray, target) => {
+    let leftSide = 0;
+    let rightSide = sortedArray.length -1;
+    while(left < rightSide){
+      let middle =  Math.floor(sortedArray.length / 2);
+      if(middle === target){
+        return middle;
+      } else if(target < middle){
+        rightSide = middle - 1;
+      } else {
+        leftSide = middle + 1;
+      }
+    }
+  }
+  
+  
   inflectionPt = findInflectionPoint(inputArray);
   sortedArray = [...inputArray.slice(inflectionPt +1), ...inputArray.slice(0, inflectionPt +1)];
   
+  return findTarget(sortedArray);
 }
   ```
+  
