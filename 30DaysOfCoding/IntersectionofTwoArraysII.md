@@ -43,4 +43,29 @@ var intersect = function(nums1, nums2) {
 
 Time Complexity: O(n^2)
 
-LETS DO BINARY SEARCH INSTEAD
+
+One loop instead
+
+```
+var intersect = function(nums1, nums2) {
+    const map = {};
+    const res = [];
+    
+    nums1.forEach(num => {
+        if (map[num] === undefined) {
+            map[num] = 1;
+        } else {
+            map[num]++;
+        }
+    });
+    
+    nums2.forEach(num => {
+        if (map[num] > 0) {
+            res.push(num);
+            map[num]--;
+        }
+    });
+    
+    return res;
+};
+```
