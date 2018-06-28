@@ -52,17 +52,31 @@ var sortList = function(head) {
     return result;
 };
 ```
+Time: O(n * log(n) + n);
+Space: O(n);
 
-Much faster approach:
 
+Supposedly faster approach, less memory:
+O(n log n)
 ```
 var sortList = function(head) {
     if(head === null || head.next === null) return head;
     
+    // recursively mergeSort
+    
+    // 1 - Find middle
     let middle = getMiddle(head);
+    
+    // 2 - Sort Right side
     let right = sortList(middle.next);
+    
+    // 3 - delete everything past middle
     middle.next = null;
+    
+    // 4 - sort the left side
     let left = sortList(head);
+    
+    // 5 - merge them together
     return merge(left, right);
 };
 
@@ -99,3 +113,5 @@ var merge = function(a, b) {
     return dummy.next;
 }
 ```
+Time: O(n * log(n));
+Memory: O(n);
