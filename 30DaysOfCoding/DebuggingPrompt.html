@@ -1,0 +1,300 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Weird MVC app</title>
+    <script>
+      class Model {
+        constructor(onUpdate) {
+          this.onUpdate = onUpdate;
+          this.notes = new Map(); // a map of number IDs to note objects
+          this.sortCategory = 'NAME';
+          this.nextId = 1;
+        }
+
+        getAllNotes() {
+        	let sortOrder = null;
+        	if(this.sortCategory ==='CREATED'){
+        		sortOrder = 'created';
+            } else {
+        		sortOrder = 'name';
+            }
+          return [...this.notes.values()].sort((noteA, noteB) => {
+            if(noteB[sortOrder] > noteA[sortOrder]) {
+                return -1;
+            }
+            else if(noteB[sortOrder] < noteA[sortOrder]) {
+                return 1;
+            } else {
+            	return 0;
+            }
+          });
+        }
+
+        getNote(id) {
+          return this.notes.get(id);
+        }
+
+        createNote(name, content, created) {
+          const note = {
+            id: this.nextId++, // number - a unique ID representing this note
+            name, // string
+            content, // string
+            created, // number - milliseconds since epoch
+          };
+          this.notes.set(note.id, note);
+          this.onUpdate();
+          return note;
+        }
+
+        rename(id, name) {
+          this.notes.get(id).name = name;
+          this.onUpdate();
+        }
+
+        updateContent(id, content) {
+          this.notes.get(id).content = content;
+          this.onUpdate();
+        }
+
+        sortByName() {
+          this.sortCategory = 'NAME';
+          this.onUpdate();
+        }
+
+        sortByCreated() {
+          this.sortCategory = 'CREATED';
+          this.onUpdate();
+        }
+
+        getSortCategory() {
+          return this.sortCategory;
+        }
+      }
+
+      class View {
+        constructor(model, controller) {
+          this.model = model;
+          this.controller = controller;
+        }
+
+        renderCreateNoteButton() {
+          return `
+            <div>
+              <input id="create-note-name" type="text" placeholder="name">
+              <input id="create-note-content" type="text" placeholder="content">
+              <button id="create-note-button">Create note</button>
+            </div>
+          `;
+        }
+
+        renderCreateMergedNoteButton() {
+          return `
+            <div>
+              <input id="create-merged-note-id1" type="text" placeholder="ID 1">
+              <input id="create-merged-note-id2" type="text" placeholder="ID 2">
+              <button id="create-merged-note-button">Create merged note</button>
+            </div>
+          `;
+        }
+
+        renderSortButton() {
+          const text = this.model.getSortCategory().toLowerCase();
+          return `
+            <button id="sort-category-button">Sorting by ${text}</button>
+          `;
+        }
+
+        renderHeader() {
+          return `
+            <h1>Note list</h1>
+            ${this.renderSortButton()}
+          `;
+        }
+
+        renderNote(note) {
+          return `
+            <li>
+              <span>${note.name} (ID: ${note.id}): ${note.content}</span>
+            </li>
+          `;
+        }
+
+        renderNoteList() {
+          return `
+            <ul id="note-list">
+              ${this.model.getAllNotes().map(this.renderNote).join('')}
+            </ul>
+          `;
+        }
+
+        render() {
+          return `
+            <section>
+              ${this.renderCreateNoteButton()}
+              ${this.renderCreateMergedNoteButton()}
+              ${this.renderHeader()}
+              ${this.renderNoteList()}
+            </section>
+          `;
+        }
+
+        updateDom() {
+          document.body.innerHTML = this.render();
+
+          const createNoteNameInput = document.querySelector('#create-note-name');
+          const createNoteContentInput = document.querySelector('#create-note-content');
+          const createNoteButton = document.querySelector('#create-note-button');
+          if (createNoteNameInput, createNoteContentInput, createNoteButton) {
+            createNoteButton.addEventListener('click', () => {
+              this.controller.createNote(createNoteNameInput.value,
+                createNoteContentInput.value);
+            });
+          }
+
+          const createMergedNoteId1 = document.querySelector('#create-merged-note-id1');
+          const createMergedNoteId2 = document.querySelector('#create-merged-note-id2');
+          const createMergedNoteButton =
+            document.querySelector('#create-merged-note-button');
+          if (createMergedNoteId1, createMergedNoteId2, createMergedNoteButton) {
+            createMergedNoteButton.addEventListener('click', () => {
+              this.controller.createMergedNote(parseInt(createMergedNoteId1.value),
+                parseInt(createMergedNoteId2.value));
+            });
+          }
+
+          const sortCategoryButton = document.querySelector('#sort-category-button');
+          if (sortCategoryButton) {
+            sortCategoryButton.addEventListener('click', () => {
+              this.controller.toggleSortCategory();
+            });
+          }
+        }
+      }
+
+      class Controller {
+        constructor(model) {
+          this.model = model;
+        }
+
+        createNote(name, content) {
+          this.model.createNote(name, content, new Date().getTime());
+        }
+
+        toggleSortCategory() {
+          if (this.model.getSortCategory() === 'NAME') {
+            this.model.sortByCreated();
+          } else {
+            this.model.sortByName();
+          }
+        }
+
+        /**
+         * Takes two existing notes, and then creates a new note with their combined names
+         * and content.
+         */
+        createMergedNote(noteId1, noteId2) {
+          if(this.model.notes.has(noteId1) && this.model.notes.has(noteId2)){
+            const note1 = this.model.getNote(noteId1);
+            const note2 = this.model.getNote(noteId2);
+            const mergedNote = Object.assign({}, note1);
+            mergedNote.name += ` - ${note2.name}`;
+            mergedNote.content += ` - ${note2.content}`;
+            this.model.createNote(mergedNote.name, mergedNote.content,
+                new Date().getTime());
+          } else {
+          	alert('One of the ids is not valid');
+          }
+
+        }
+      }
+
+      class App {
+        constructor() {
+          this.model = new Model(() => this.view.updateDom());
+          this.controller = new Controller(this.model);
+          this.view = new View(this.model, this.controller);
+          this.view.updateDom();
+        }
+      }
+
+      function runTests() {
+        function assertEquals(a, b) {
+          if (a === b) {
+            console.log('OK', a, '===', b);
+          } else {
+            console.error('FAIL', a, '!==', b);
+          }
+        }
+
+        function testModelRename() {
+          console.log('testModelRename');
+          const app = new App();
+          const noteId = app.model.createNote('name', 'content').id;
+          app.model.rename(noteId, 'name2');
+          assertEquals('name2', app.model.getNote(noteId).name);
+        }
+
+        function testModelUpdateContent() {
+          console.log('testModelUpdateContent');
+          const app = new App();
+          const noteId = app.model.createNote('name', 'content').id;
+          app.model.updateContent(noteId, 'content2');
+          assertEquals('content2', app.model.getNote(noteId).content);
+        }
+
+        function testControllerCreateMergedNote() {
+          console.log('testControllerCreateMergedNote');
+          const app = new App();
+          const noteId1 = app.model.createNote('alpha', 'foo', 1).id;
+          const noteId2 = app.model.createNote('bravo', 'bar', 2).id;
+          app.controller.createMergedNote(noteId1, noteId2);
+          assertEquals('alpha', app.model.getNote(1).name);
+          assertEquals('bravo', app.model.getNote(2).name);
+          assertEquals('alpha - bravo', app.model.getNote(noteId2 + 1).name);
+        }
+
+        function testViewRender_sortByName() {
+          console.log('testViewRender_sortByName');
+          const app = new App();
+          app.model.createNote('alpha', 'content', 1);
+          app.model.createNote('charlie', 'content', 2);
+          app.model.createNote('bravo', 'content', 3);
+          app.model.sortByName();
+          const notes = [...document.querySelectorAll('#note-list li span')]
+            .map(e => e.textContent);
+          assertEquals(3, notes.length);
+          assertEquals('alpha (ID: 1): content', notes[0]);
+          assertEquals('bravo (ID: 3): content', notes[1]);
+          assertEquals('charlie (ID: 2): content', notes[2]);
+        }
+
+        function testViewRender_sortByCreated() {
+          console.log('testViewRender_sortByCreated');
+          const app = new App();
+          app.model.createNote('alpha', 'content', 1);
+          app.model.createNote('charlie', 'content', 2);
+          app.model.createNote('bravo', 'content', 3);
+          app.model.sortByCreated();
+          const notes = [...document.querySelectorAll('#note-list li span')]
+            .map(e => e.textContent);
+          assertEquals(3, notes.length);
+          assertEquals('alpha (ID: 1): content', notes[0]);
+          assertEquals('charlie (ID: 2): content', notes[1]);
+          assertEquals('bravo (ID: 3): content', notes[2]);
+        }
+
+        testModelRename();
+        testModelUpdateContent();
+        testControllerCreateMergedNote();
+        testViewRender_sortByName();
+        testViewRender_sortByCreated();
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        window.app = new App();
+      });
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
