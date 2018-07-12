@@ -33,3 +33,29 @@ nearest_square = num**2
 
 print(nearest_square)
 ```
+
+Break/continue
+
+```
+# HINT: modify the headlines list to verify your loop works with different inputs
+headlines = ["Local Bear Eaten by Man",
+             "Legislature Announces New Laws",
+             "Peasant Discovers Violence Inherent in System",
+             "Cat Rescues Fireman Stuck in Tree",
+             "Brave Knight Runs Away",
+             "Papperbok Review: Totally Triffic"]
+
+news_ticker = ""
+# write your loop here
+for line in headlines:
+    for word in line.split(' '):
+        if(len(news_ticker) == 0):
+            news_ticker += word
+        elif((len(news_ticker) + len(word) + 1) <= 140):
+            news_ticker += (' {}').format(word)
+            continue
+        else:
+            break
+
+print(news_ticker)
+```
