@@ -1,0 +1,46 @@
+
+Longest Improvement
+Given an array, find the length of the longest increasing sequence.
+
+Examples
+Input	Output
+numbers:
+[ 10 ]	1
+numbers:
+[ 10, 20, 30, 10, 20 ]	3
+
+function longestImprovement (numbers) {
+  let increasingNumbers = [];
+  let longestLength = 0;
+  for(let i = 0; i< numbers.length - 1; i++){
+    let subArray = [numbers[i]];
+    for(let j = i + 1; j < numbers.length; j++){
+      if(numbers[j] > numbers[i]){
+        subArray.push(numbers[j]);
+      } else {
+        increasingNumbers.push(subArray);
+        break;
+      }
+    }
+  }
+  
+  increasingNumbers.forEach((instance) => {
+    if(instance.length > longestLength){
+      longestLength = instance.length;
+    }
+  });
+  return longestLength;
+}
+
+// Optomization:
+
+function longestImprovement (numbers, sequence = 1, max = 1) {
+  numbers.forEach((instance, index) => {              //Iterate through numbers
+    if (index !== 0 && instance > numbers[index-1]){  // If not the first value && the current number is greater than previous index number
+      sequence++;                                     // then increase sequence number
+    } else {
+      (max = Math.max(max, sequence)) & (sequence = 1)// otherwise max is the max between max and sequnce and reset sequence
+    };
+  })
+  return max;
+}

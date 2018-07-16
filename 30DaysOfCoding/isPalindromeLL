@@ -1,0 +1,48 @@
+Check if a linked list is a palindrome:
+
+##Iterative approach
+
+We will be using slow and fast pointers.
+When the fast pointer.next == null, then the slow pointer will indicate that we are in the middle of the list.
+
+isPalindrome(head){
+  let fast = head;
+  let slow = head;
+  const stack = [];
+  
+  while(fast !== null and fast.next !== null){
+    stack.push(slow.data);
+    slow = slow.next;
+    fast = fast.next.next;
+  }
+  
+  // This is to handle our edge case where there is an odd number of nodes. 
+  while(fast !== null){
+    slow = slow.next
+  }
+  
+  while (slow !== null){
+    const top = stack.pop()
+    if(top !== slow.data){
+      return false;
+    } 
+    
+    slow = slow.next;
+  }
+  
+  return true;
+}
+
+
+// first approach 
+
+palindrome(head){
+  let str = '';
+  
+  while(head !== null){
+    str += head.data;
+    head = head.next;
+  }
+  
+  return str === str.split('').reverse().join('');
+}

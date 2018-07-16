@@ -1,0 +1,29 @@
+// This problem was asked by Stripe.
+
+// Given an array of integers, find the first missing positive integer in linear time and constant space. In other words, find the lowest positive integer that does not exist in the array. The array can contain duplicates and negative numbers as well.
+
+// For example, the input [3, 4, -1, 1] should give 2. The input [1, 2, 0] should give 3.
+
+const findMissingValue =  (input) => {
+  let min;
+  let max;
+  let currentSum = 0;
+  
+  const positives = input.map((val) => {
+    if(val > 0){
+      if(!min || !max){
+        min = val;
+        max = val;
+      } else if(val > min){
+        max = val;
+      } else if(val < min){
+        min = val;
+      }
+      currentSum += val;
+      return val;
+    }
+  });
+  return currentSum - (((max-min) * (max - min +1)) /2 );
+}
+
+findMissingValue([3, 4, -1, 2, 6, 5, 8]);

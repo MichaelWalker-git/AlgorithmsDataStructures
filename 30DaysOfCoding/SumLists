@@ -1,0 +1,54 @@
+Sum Lists:
+You have two numbers represented by a linked list, where each node contains a single digit. The digit are stored in reverse
+order, such that the 1's digit is at the head of the list. Write a fucntion that adds the two numbrs and returns the 
+sum as a linked list.
+
+EXAMPLE
+Input: (7 -> 1 -> 6) + (5 -> 9 -> 2)    //  617 + 295
+Output: (9 -> 1 -> 2)                   //  912
+
+# First approach
+## flawed because of linkedLists of different lengths
+sumLinkedList(L1, L2){
+  let multiplier = 1;
+  let result = 0;
+  if(!L1 || !L2){
+    return null;
+  }
+  while( L1 || L2 ){
+    const first = (L1) ? L1.value * multiplier : 0;
+    const sec = (L2) ? L2.value * multiplier : 0;
+    result += (first + sec);
+    multiplier *= 10;
+    L1 = L1.next;
+    L2 = L2.next;
+  }
+  return result;
+}
+
+# Second approach
+function backWards(L1, L2, carry) {
+  let result = new LinkedList();
+  let currentValue = carry;
+  if(L1 === null && L2 ===  null && carry === 0) {
+     return null;
+  }
+  if(L1){
+    currentValue += (L1.value % 10);
+  }
+  
+  if(L2){
+    currentValue += (L2.value % 10);
+  }
+  result.value = currentValue % 10;
+  
+  if(L1.next || L2.next){
+    const nextL1 = L1.next ? L1.next : null;
+    const nextL2 = L2.next ? L2.next : null;
+    const carry =  (L1.value + L2.value >= 10) ? 1 : 0;
+    const more = backWards(nextL1, nextL2, carry);
+    result.next = more;
+  }
+  return result;
+}
+

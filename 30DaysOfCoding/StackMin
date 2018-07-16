@@ -1,0 +1,49 @@
+Add a method that would return the min value of a stack in O(1) time.
+
+// keep track of lowest number upon push 
+
+// edge case: when we pop that number... are there duplicates?
+
+class StackMin {
+  let minValue;
+  let stack = [];
+  
+  push = (val) => {
+    stack.push(val);
+    minValue = (!minValue) ? val : (minValue > val) ? val : minValue;
+  }
+  
+  pop = () => {
+    stack.pop();
+  }
+  
+  min = () => minValue; 
+}
+
+
+// Above violates the O(1) rule method for all methods.
+
+// 2nd Attempt
+
+class StackWithMin extends Stack {
+  const mins = [];
+  
+  push = (val) => {
+    if(!mins.length || val < mins()){
+      mins.push(val)
+    }
+    super.push(val);
+  }
+  
+  pop = () => {
+    const end = super.pop();
+    if(end === mins()){
+      mins.pop();
+    }
+  }
+  
+  showMin = () => {
+    return (!mins.length) ?  "Error" : "mins.peek()";
+  }
+}
+

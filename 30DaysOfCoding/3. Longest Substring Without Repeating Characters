@@ -1,0 +1,30 @@
+Given a string, find the length of the longest substring without repeating characters.
+
+Examples:
+
+Given "abcabcbb", the answer is "abc", which the length is 3.
+
+Given "bbbbb", the answer is "b", with the length of 1.
+
+Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+const lengthOfLongestSubstring = function(s) {
+    let longest = 0;
+    let substring_map = new Map();
+    let start = 0;
+    for( let i = 0; i< s.length; i++) {
+        const position = substring_map.get(s[i]);
+        if (position !==  null && position >= start){
+            let length = i - start;
+            start = position + 1;
+            longest = Math.max(length, longest);
+        }
+        substring_map.set(s[i], i);
+    }
+    longest = Math.max(s.length - start, longest);
+    return longest;
+};

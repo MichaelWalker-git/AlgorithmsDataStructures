@@ -1,0 +1,27 @@
+Words within Words
+Given an array of unique words, find the word that contains the greatest number of other words. A word must be at least two letters long.
+
+Examples
+Input	Output
+wordList:
+[ "gray", "grays", "ray", "rays", "strays" ]
+
+
+function nestedWordCount (wordList, count = 0, max = [0]) {
+  if(!wordList) {
+    return null;
+  }
+  wordList.forEach((target) => {
+    wordList.forEach((otherWord) => {
+      if(otherWord.length > 1 && target.includes(otherWord)){
+        count++;
+        if(count > max[0]){
+          max[0] = count;
+          max[1] = target;
+        }
+      }
+    });
+    count = 0;
+  });
+  return max[1];
+}
