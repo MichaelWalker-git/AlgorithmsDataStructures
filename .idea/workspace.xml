@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db5bd529-cf7b-4938-9abc-3ae1bc015829" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GCP_Exam_Prep_Notes/Coursera_notes.md" beforeDir="false" afterPath="$PROJECT_DIR$/GCP_Exam_Prep_Notes/Coursera_notes.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -76,8 +75,8 @@
       <file leaf-file-name="Coursera_notes.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GCP_Exam_Prep_Notes/Coursera_notes.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="695">
-              <caret line="172" lean-forward="true" selection-start-line="172" selection-end-line="172" />
+            <state relative-caret-position="833">
+              <caret line="230" column="40" selection-start-line="230" selection-start-column="40" selection-end-line="230" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -126,9 +125,11 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
-    <option name="width" value="1440" />
-    <option name="height" value="900" />
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="x" value="-182" />
+    <option name="y" value="-1200" />
+    <option name="width" value="1920" />
+    <option name="height" value="1200" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -284,26 +285,26 @@
       <updated>1502250703096</updated>
       <workItem from="1502250704481" duration="1395000" />
       <workItem from="1502254740009" duration="193000" />
-      <workItem from="1531768167426" duration="2239000" />
+      <workItem from="1531768167426" duration="3871000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3827000" />
+    <option name="totallyTimeSpent" value="5459000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="6" />
+    <frame x="-182" y="-1200" width="1920" height="1200" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Key Promoter X" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13519314" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.10063898" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.24964234" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.19733334" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.19733334" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" id="Palette" order="3" />
@@ -456,8 +457,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GCP_Exam_Prep_Notes/Coursera_notes.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="695">
-          <caret line="172" lean-forward="true" selection-start-line="172" selection-end-line="172" />
+        <state relative-caret-position="833">
+          <caret line="230" column="40" selection-start-line="230" selection-start-column="40" selection-end-line="230" selection-end-column="40" />
         </state>
       </provider>
     </entry>

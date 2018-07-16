@@ -191,3 +191,106 @@ Secure Socket
 - SSL Load balancing
 - proxy load balancer
 - non HTTPS
+
+TCP
+- Global TP proxy
+- Particular port
+- non SSL
+
+Load balancing Internal (internal IP)
+- 8.8.8.8 free by Google
+- DNS translates the internet hostnames into addresses
+- Cloud DNS - same infrastracture - low latency; high availability.
+ -- GCP consoles
+ -- API
+ -- CDN (edge caching)
+
+Cloud Router - enables dyanmic gateway protocol to access the topography of a VPC with an onsite premise network
+-- share route information over VPN
+-- enables dynamic VPC use
+-- ie.) Add subnet to VPC + on premise network will get routes to be seen
+
+Direct Peering - connect any business network to Google
+-- Customer doesn't want to use the public internet
+-- Peering = router in same public data center as a google point of presence, exchanging traffic
+-- Not covered by SLS
+
+Dedicated Interconnect
+-- Physical connection, lower latency, higher availability.
+-- Direct connection with on-premises Google, may be cheaper than ISP
+-- Great for companies that have data intensive apps.
+
+Carrier Peering
+-- higher avail
+-- lower latency
+-- enterprise grade network servers using server proxies.
+
+
+Cloud Storage
+-- Object file system storage. (Binary immutable Objects)
+-- Encrypts data before writing to disk
+-- Bytes of data with unique key
+-- fully managed, no capacity limit, provision capacity
+-- Example: website, data, cluster, large files for download
+-- Buckets for objects.
+-- Can use versioning on these objects
+    -- new > old
+    -- lifecycle management, "keep most recent", "delete versions > 365 days"
+-- Transfer Data - HTTPS
+-- Other GCP services
+-- Geographic location, default class for buckets
+-- Cloud IAM
+  -- Project into Buckets
+  -- ACL(s) finer control
+  -- Scope (users), permissions
+-- Storage - all accessible by API
+  -- Region
+    -- Less redundant
+    -- Cheaper
+    -- Specific region
+    Uses:
+      -- Data for compiling
+      -- VMS
+      -- Kubernetes Engine
+  -- Multiregional
+    --  High performance
+    -- Broad continuation, redundant
+    -- Frequently used websites
+    -- Interaction control
+    -- Mobile app
+  Backups and archival storage
+  -- Nearline
+    -- Infrenquently stored durable data
+    -- Read/ write once a month
+  -- Coldline
+    -- Low cost
+    -- Data archival
+    -- Online backup
+    -- Disaster recovery
+    -- Once a year; min allowed time: 90 days
+
+Big Table
+-- noSQL, data analysis
+-- Single key look-ups
+-- HBase (Sql like queries), Hadoop portability
+-- Structure data / flexible schemas,
+-- Sparely populatd rows
+-- Billions of rows, don't need to reconfigure
+-- Persistent hash tables
+-- Very low latency
+-- Handles upgrades easily, highly scalable
+-- Encryption
+-- Example: From application database stream to spark storage. batch processes, summarize down
+-- Uses: iOT, user analytics, financial documents
+
+Cloud SQL
+-- DB Schema 0 consitent
+-- Transaction is all or nothing; Bank example
+-- mySQL, postGreSQL (beta)
+-- Managed service or server in VM compute engine
+    -- Read duplicates
+-- Replica service during outage
+-- On demand/ schedule batch
+-- Google secruity
+-- Scale vertically with machine type
+-- SQL workbench with other apps
