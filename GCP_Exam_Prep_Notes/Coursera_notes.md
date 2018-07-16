@@ -324,3 +324,58 @@ Cloud Spanner
 -- Examples: Finance and investment industry
 
 Introduction to Containers
+Alternate to hardware
+# VMs vs Containers
+Virtual Machines
+-- Virtual Machines are isolated from one another in part by each VM having its own instance of OS
+-- OS -> Slow to boot
+-- Modern OS - built in capcity to isolate environment
+    -- Processes: Running, name space, limit by supervisor
+
+Containers
+-- Package up your application into minimally sized components
+-- Abstract unnecessary and unimportant details in environment
+-- Loose coupling
+-- Containers start up quicker, use less resources than Virtual Machines
+-- Min. required software, have its own instance of OS
+-- Calling into kernal only when it is necessary
+-- Determines image format
+-- Kubernetes uses docker container runtime
+
+Kubernetes
+-- Multi cloud soltion
+-- Container cluster orchestration system
+-- Pod: Group of containers networked together with guaranteed network access
+    -- Help devs build modularity
+-- Example: Web shared Application
+    -- Has own dev tools (one container), your tools in another container
+    -- Laptop/ GCP
+    -- Modular/ Replacable
+    -- Rolling update
+        -- Update without downtime
+    -- Kubernetes cluster = group of machines scheduled for container(nodes)
+        -- load balancer/ scaling option
+    -- Cloud agnostic
+        -- Storage persistence
+        -- Network
+        -- Load Balancer
+
+-- Build and manage Kubernetes cluser
+    -- Manage, build, delete clusters
+    -- Resources from compute engine VPC(s)
+-- Declarative syntax
+    -- Give description of cluster environment you want and Kubernetes handles the changes, and implements new settings
+    -- NO - No need to issue the underlying compute engine or API calls
+    -- YES - Relieves developers from the operational details of running a cluster
+-- Built in logging
+-- Autonode upgrades
+-- To use kubernetes, you need to be able to build kubernetes containers, store images of container
+
+# Google Cloud Container Builder/ Google Cloud Container Registry
+App Engine - Platform as a Service - Scalable Application
+-- Scalable, deployment, maintainable
+-- Highly Variable
+-- Standard and Flexible Environment
+
+Standard Environment
+-- Free daily usage
