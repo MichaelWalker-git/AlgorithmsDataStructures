@@ -269,10 +269,28 @@ Cloud Storage
     -- Disaster recovery
     -- Once a year; min allowed time: 90 days
 
+Cloud Data Store
+-- noSQL, structured data
+-- ACID transactions, SQL-like queries, indexes
+-- Automatically handles sharding/ replication
+-- Transactions using indexed properties
+    -- Multirow queries
+-- can be integration point
+    -- With Cloud Datastore's RESTful interface
+    -- Data can easily be accessed by any deployment target.
+    -- Build solutions that span across App Engine and Compute Engine
+-- Datastore is more geared towards Python/Java/Go web app developers (originally App Engine)
+-- The billing model is very different:
+     -- Datastore charges for read/write operations, storage and bandwidth
+     -- Bigtable charges for 'nodes', storage and bandwidth
+
+
 Big Table
 -- noSQL, data analysis
--- Single key look-ups
+-- Single key look-ups, indexed by a single Row key.
+-- More like IAAS, single region
 -- HBase (Sql like queries), Hadoop portability
+-- Atomcity on one row, no transactions
 -- Structure data / flexible schemas,
 -- Sparely populatd rows
 -- Billions of rows, don't need to reconfigure
@@ -294,3 +312,15 @@ Cloud SQL
 -- Google secruity
 -- Scale vertically with machine type
 -- SQL workbench with other apps
+
+Cloud Spanner
+-- Virtually unlimited horizontal scalability and 99,999% service-level agreement (SLA)
+-- Pentabytes of data
+-- Relational database service with transactional consistency
+-- Schemas, SQL, auto synchronous replication, high availability
+-- Outgrown RDS (AWS)/ sharding databases for throughput high performance
+-- Cross-table transactional support: transactions can span across multiple tables—doesn’t have to be limited to a single table (unlike Apache HBase or Apache Kudu).
+-- Need global data
+-- Examples: Finance and investment industry
+
+Introduction to Containers
