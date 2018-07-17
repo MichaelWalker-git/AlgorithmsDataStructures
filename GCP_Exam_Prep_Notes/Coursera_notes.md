@@ -324,3 +324,165 @@ Cloud Spanner
 -- Examples: Finance and investment industry
 
 Introduction to Containers
+Alternate to hardware
+# VMs vs Containers
+Virtual Machines
+-- Virtual Machines are isolated from one another in part by each VM having its own instance of OS
+-- OS -> Slow to boot
+-- Modern OS - built in capcity to isolate environment
+    -- Processes: Running, name space, limit by supervisor
+
+Containers
+-- Package up your application into minimally sized components
+-- Abstract unnecessary and unimportant details in environment
+-- Loose coupling
+-- Containers start up quicker, use less resources than Virtual Machines
+-- Min. required software, have its own instance of OS
+-- Calling into kernal only when it is necessary
+-- Determines image format
+-- Kubernetes uses docker container runtime
+
+Kubernetes
+-- Multi cloud soltion
+-- Container cluster orchestration system
+-- Pod: Group of containers networked together with guaranteed network access
+    -- Help devs build modularity
+-- Example: Web shared Application
+    -- Has own dev tools (one container), your tools in another container
+    -- Laptop/ GCP
+    -- Modular/ Replacable
+    -- Rolling update
+        -- Update without downtime
+    -- Kubernetes cluster = group of machines scheduled for container(nodes)
+        -- load balancer/ scaling option
+    -- Cloud agnostic
+        -- Storage persistence
+        -- Network
+        -- Load Balancer
+
+-- Build and manage Kubernetes cluser
+    -- Manage, build, delete clusters
+    -- Resources from compute engine VPC(s)
+-- Declarative syntax
+    -- Give description of cluster environment you want and Kubernetes handles the changes, and implements new settings
+    -- NO - No need to issue the underlying compute engine or API calls
+    -- YES - Relieves developers from the operational details of running a cluster
+-- Built in logging
+-- Autonode upgrades
+-- To use kubernetes, you need to be able to build kubernetes containers, store images of container
+
+# Google Cloud Container Builder/ Google Cloud Container Registry
+App Engine - Platform as a Service - Scalable Application
+-- Scalable, deployment, maintainable
+-- Highly Variable
+-- Standard and Flexible Environment
+
+Standard Environment
+-- Free daily usage
+-- Milliseconds to be ready
+-- Low usage apps can be free
+-- Test locally with SDK
+-- Binary, runtime for JAVA, Python, Go,
+    -- No 3rd party apps
+    -- Can't write to Local
+    -- All requests will timeout after 60 seconds
+-- Sandbox
+    -- Scale/ Manage/ Fine Grained control
+1.) Develop/ Test the web locally
+2.) Use a SDK to deploy to App Engine
+3.) App engine autoscales/ reliably serves your webpage
+    -- Can access a variety of services using dedicated APIs
+
+Flexible Environment
+-- Specify container (Docker) on VMs
+    -- VM / App engine maintains this for you with Health Checks
+    -- Which geography/location of these VMs
+    -- Standard runtime can access containerized apps
+-- No autoshutdown
+-- Can use 3rd party apps
+-- Network access
+-- SSH abilities
+
+App Engine vs Kubernetes
+
+App Engine
+1.) People who want to take max control of their applications, deployment and scaling
+2.) Primary use: Web/ Mobile apps
+    -- Containers are a means to an end
+
+Kubernetes
+1.) Any language support
+2.) Container based workhorse
+
+
+APIs - Application Programming Interfaces
+-- Structured software for interface for consumers
+-- Abstracted / documented unnecessary information
+-- Versions of APIs
+
+Supporting APIs in two ways
+1.) Cloud Endpoints
+Example: Developing software. One of GCP's backend / backend APIs
+    -- Only consumed by developers you trust
+    -- Monitor log its used
+Answer: Cloud Endpoints - cloud console
+    -- Your choice of language/ client technologies
+
+2.) Apigee Edge (3rd party)
+    -- Plaform for making APIs available to your customers
+    -- Partners ind eveloping /managing proxies
+    -- Bussiness focus: Rate limiter, quotas analytics
+
+# Development in the cloud
+Git - own git instance
+-- hosted, 3rd party
+
+Cloud Source Repository
+-- Private git repository
+-- Source Viewer
+
+Event Driven Parts
+-- What provisioning resources to that new service?
+-- Cloud Functions Beta
+    -- Automatically run/ runtime binaries
+-- Create single purpose function that respond to events without server/ runtime
+-- You chose what events to watch, and triggers what cloud functionality
+
+Problem: Keeping track of environments manually => Lots of work
+-- Answer: Deployment Manager - Templates Declaration (infrastracture manager)
+    -- Creation and management of GCP resources for you
+    -- Template file (YAML/ Python) -> Components
+    -- Does all template direction
+        -- Edit YAML
+    -- Version control
+        -- Use YAML file
+
+Monitoring - Stack driver
+    -- Infrastructure
+    -- Debug,
+    -- Logger,
+    -- VM, container,
+    -- Metrics
+    -- Trace
+    -- Error
+-- Respond with information vs Panic
+-- Uptime checks, load balances, alerts with uptime/ errors
+-- Dashboards = customizable
+-- Logging - Metrics, alerts, dashboard
+    -- Cloud PubSub, Big Query
+-- Error reporting , new errors detected per URL statistics
+-- Debugger: production code to source with application state.
+
+# Google Cloud Big Data Solutions
+-- Integrated Serverless Platform
+    -- Fully managed custom solution
+    -- Apache Hadoop
+        -- MapReduce Programming model
+            -- 1 Function Map runs in parallel with massive dataset to produce intermediate results
+            -- 1 Function Reduce builds final result set with intermediate set
+    -- Dataproc
+        -- Manages Develop and deploy Hadoop/ spark/ Hive/ Pig on GCP
+        -- Creates clusters in 90 seconds or less
+        -- Scales clusters allowing you to integrate with Cloud Storage and stackdriver Logging
+        -- Coordinate and manage the lifecyle of clusters, which run until shutdown
+        -- You can resize your clusers even during job processing

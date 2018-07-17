@@ -75,8 +75,8 @@
       <file leaf-file-name="Coursera_notes.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GCP_Exam_Prep_Notes/Coursera_notes.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
-              <caret line="275" column="40" selection-start-line="275" selection-start-column="40" selection-end-line="275" selection-end-column="40" />
+            <state relative-caret-position="848">
+              <caret line="485" column="28" selection-start-line="485" selection-start-column="28" selection-end-line="485" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -285,12 +285,12 @@
       <updated>1502250703096</updated>
       <workItem from="1502250704481" duration="1395000" />
       <workItem from="1502254740009" duration="193000" />
-      <workItem from="1531768167426" duration="6640000" />
+      <workItem from="1531768167426" duration="10280000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8228000" />
+    <option name="totallyTimeSpent" value="11868000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-182" y="-1200" width="1920" height="1200" extended-state="0" />
@@ -457,8 +457,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GCP_Exam_Prep_Notes/Coursera_notes.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="275" column="40" selection-start-line="275" selection-start-column="40" selection-end-line="275" selection-end-column="40" />
+        <state relative-caret-position="848">
+          <caret line="485" column="28" selection-start-line="485" selection-start-column="28" selection-end-line="485" selection-end-column="28" />
         </state>
       </provider>
     </entry>
