@@ -59,8 +59,8 @@ Red (Orange) team exercises, simulated exercises
 
 -Vulnerability reward program
 
-What's new in GCP
-Project
+# What's new in GCP
+## Project
 - IAM - control for admins
 - group related business services
 - Giving lease amount privileges, only privileges nesseceary for job
@@ -79,24 +79,24 @@ Project Ids are always unique
 
 More generous policies overrides (IMPORTANT)
 
-Identity Access Management
+## Identity Access Management
 - Who can take actions
 - Who, what, what resources.
 - Who = Google Account, GSuit Domain group
 - What = Collection of permissions
 - What Resources = Start/ Stop Permissions
 
-Roles
-Primitives
+# Roles
+## Primitives
 - Owner
 - Editor
 - Viewee (View Only)
 - Billing (W/out change resource abilities)
 
-Pre-defined set of roles, can be applied to folder, organization, etc.
+## Pre-defined set of roles, can be applied to folder, organization, etc.
 - ie.) Big Table - part project, Big Table- instance
 
-Fine grained permissions
+## Fine grained permissions
 - List
 - Delete
 - Get
@@ -104,49 +104,49 @@ Fine grained permissions
 - Start
 - Stop
 
-Minimum amount of rules necessary for their job.
+## Minimum amount of rules necessary for their job.
 - Start/ stop
 
 - Only at project, or org level; not folder level
 
-Service Account
+## Service Account
 - Controls server - server interactions
 - Carry server- server comms
 - authenticate one service to another
 - control privileges used by services
 
-Create Service Account to authenticate your virtual machine to cloud storage
+## Create Service Account to authenticate your virtual machine to cloud storage
 - identified by an email address, project_number, project_id
 - use crypto keys instead of passwords
 - needs to be managed
 - Also a resource
 - Different VMs = different permissions for groups
 
-Interacting with GCP
-SDK - set of tool to manage
+# Interacting with GCP
+## SDK - set of tool to manage
 - GCP Shell- main command line interface for GCP
 - gsutils
 - big query
 
-Restful API
+## Restful API
 - uses JSON, urls, pass info like web browsers
 - console = turn on and off APIs, limit
 
-APIs explorer
+## APIs explorer
 - Cloud launcher = quick solution
 - Solution marketplace containing pre-packaged ready to deploy solutions
 
-Editable Before deployment
+## Editable Before deployment
 - No additiaonl charge underneath normal usage fees
 - Commercially avail. licenses
 - LAMP - Linux, Apache, mySQL, PHP
 
-Virtual Machine
+## Virtual Machine
 - Fully fledged OS -editable
 - CPU/ memory/type of storage
 - Network connection
 
-Virtual Private Cloud
+## Virtual Private Cloud
 - Connect GCP resources
 - Static routes
 - Global scope
@@ -155,7 +155,7 @@ Virtual Private Cloud
 - Different Resources
 - Expand subnets by IP
 
-VPC - one network
+## VPC - one network
 - Can have neighboring subnets, two compute engines, in different zones
 - great network layers
 
@@ -170,10 +170,10 @@ VPC - one network
 (Snapshops - used to migrate backups)
 (Preemptive VMs - Compute engine, delete this VM when its needed in another region/Cheaper)
 
-Preset Memory, CPUs, etc.
+## Preset Memory, CPUs, etc.
 - Scaling out, not scaling up, balancing loads.
 
-VPC capabilities
+## VPC capabilities
 - Routing Tables - We use them to forward traffic from one instance to another
 - Firewall, metadata tags
 - VPC belong to GPC projects
@@ -183,21 +183,21 @@ VPC capabilities
 ---- cross region/ subregion
 ---- moves traffic, if region is down
 
-HTTPS Load balancer
+## HTTPS Load balancer
 - Cross regional load balancer for web app
 - Cloud CDN - Partner program
 
-Secure Socket
+## Secure Socket
 - SSL Load balancing
 - proxy load balancer
 - non HTTPS
 
-TCP
+## TCP
 - Global TP proxy
 - Particular port
 - non SSL
 
-Load balancing Internal (internal IP)
+## Load balancing Internal (internal IP)
 - 8.8.8.8 free by Google
 - DNS translates the internet hostnames into addresses
 - Cloud DNS - same infrastracture - low latency; high availability.
@@ -205,28 +205,28 @@ Load balancing Internal (internal IP)
  - API
  - CDN (edge caching)
 
-Cloud Router - enables dyanmic gateway protocol to access the topography of a VPC with an onsite premise network
+## Cloud Router - enables dyanmic gateway protocol to access the topography of a VPC with an onsite premise network
 - share route information over VPN
 - enables dynamic VPC use
 - ie.) Add subnet to VPC + on premise network will get routes to be seen
 
-Direct Peering - connect any business network to Google
+## Direct Peering - connect any business network to Google
 - Customer doesn't want to use the public internet
 - Peering = router in same public data center as a google point of presence, exchanging traffic
 - Not covered by SLS
 
-Dedicated Interconnect
+## Dedicated Interconnect
 - Physical connection, lower latency, higher availability.
 - Direct connection with on-premises Google, may be cheaper than ISP
 - Great for companies that have data intensive apps.
 
-Carrier Peering
+## Carrier Peering
 - higher avail
 - lower latency
 - enterprise grade network servers using server proxies.
 
-
-Cloud Storage
+# Cloud Data Storage Options
+## Cloud Storage
 - Object file system storage. (Binary immutable Objects)
 - Encrypts data before writing to disk
 - Bytes of data with unique key
@@ -269,7 +269,7 @@ Cloud Storage
     - Disaster recovery
     - Once a year; min allowed time: 90 days
 
-Cloud Data Store
+## Cloud Data Store
 - noSQL, structured data
 - ACID transactions, SQL-like queries, indexes
 - Automatically handles sharding/ replication
@@ -285,7 +285,7 @@ Cloud Data Store
      - Bigtable charges for 'nodes', storage and bandwidth
 
 
-Big Table
+## Big Table
 - noSQL, data analysis
 - Single key look-ups, indexed by a single Row key.
 - More like IAAS, single region
@@ -301,7 +301,7 @@ Big Table
 - Example: From application database stream to spark storage. batch processes, summarize down
 - Uses: iOT, user analytics, financial documents
 
-Cloud SQL
+## Cloud SQL
 - DB Schema 0 consitent
 - Transaction is all or nothing; Bank example
 - mySQL, postGreSQL (beta)
@@ -313,7 +313,7 @@ Cloud SQL
 - Scale vertically with machine type
 - SQL workbench with other apps
 
-Cloud Spanner
+## Cloud Spanner
 - Virtually unlimited horizontal scalability and 99,999% service-level agreement (SLA)
 - Pentabytes of data
 - Relational database service with transactional consistency
@@ -323,7 +323,7 @@ Cloud Spanner
 - Need global data
 - Examples: Finance and investment industry
 
-Introduction to Containers
+# Introduction to Containers
 Alternate to hardware
 # VMs vs Containers
 Virtual Machines
@@ -332,7 +332,7 @@ Virtual Machines
 - Modern OS - built in capcity to isolate environment
     - Processes: Running, name space, limit by supervisor
 
-Containers
+## Containers
 - Package up your application into minimally sized components
 - Abstract unnecessary and unimportant details in environment
 - Loose coupling
@@ -342,7 +342,7 @@ Containers
 - Determines image format
 - Kubernetes uses docker container runtime
 
-Kubernetes
+## Kubernetes
 - Multi cloud soltion
 - Container cluster orchestration system
 - Pod: Group of containers networked together with guaranteed network access
@@ -372,12 +372,12 @@ Kubernetes
 - To use kubernetes, you need to be able to build kubernetes containers, store images of container
 
 # Google Cloud Container Builder/ Google Cloud Container Registry
-App Engine - Platform as a Service - Scalable Application
+## App Engine - Platform as a Service - Scalable Application
 - Scalable, deployment, maintainable
 - Highly Variable
 - Standard and Flexible Environment
 
-Standard Environment
+## Standard Environment
 - Free daily usage
 - Milliseconds to be ready
 - Low usage apps can be free
@@ -393,7 +393,7 @@ Standard Environment
 3.) App engine autoscales/ reliably serves your webpage
     - Can access a variety of services using dedicated APIs
 
-Flexible Environment
+## Flexible Environment
 - Specify container (Docker) on VMs
     - VM / App engine maintains this for you with Health Checks
     - Which geography/location of these VMs
@@ -403,24 +403,24 @@ Flexible Environment
 - Network access
 - SSH abilities
 
-App Engine vs Kubernetes
+# App Engine vs Kubernetes
 
-App Engine
+## App Engine
 1.) People who want to take max control of their applications, deployment and scaling
 2.) Primary use: Web/ Mobile apps
     - Containers are a means to an end
 
-Kubernetes
+## Kubernetes
 1.) Any language support
 2.) Container based workhorse
 
 
-APIs - Application Programming Interfaces
+# APIs - Application Programming Interfaces
 - Structured software for interface for consumers
 - Abstracted / documented unnecessary information
 - Versions of APIs
 
-Supporting APIs in two ways
+# Supporting APIs in two ways
 1.) Cloud Endpoints
 Example: Developing software. One of GCP's backend / backend APIs
     - Only consumed by developers you trust
@@ -437,18 +437,18 @@ Answer: Cloud Endpoints - cloud console
 Git - own git instance
 - hosted, 3rd party
 
-Cloud Source Repository
+# Cloud Source Repository
 - Private git repository
 - Source Viewer
 
-Event Driven Parts
+# Event Driven Parts
 - What provisioning resources to that new service?
 - Cloud Functions Beta
     - Automatically run/ runtime binaries
 - Create single purpose function that respond to events without server/ runtime
 - You chose what events to watch, and triggers what cloud functionality
 
-Problem: Keeping track of environments manually => Lots of work
+# Problem: Keeping track of environments manually => Lots of work
 - Answer: Deployment Manager - Templates Declaration (infrastracture manager)
     - Creation and management of GCP resources for you
     - Template file (YAML/ Python) -> Components
@@ -457,7 +457,7 @@ Problem: Keeping track of environments manually => Lots of work
     - Version control
         - Use YAML file
 
-Monitoring - Stack driver
+# Monitoring - Stack driver
     - Infrastructure
     - Debug,
     - Logger,
