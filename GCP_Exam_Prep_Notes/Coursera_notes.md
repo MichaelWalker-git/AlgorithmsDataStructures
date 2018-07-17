@@ -379,3 +379,72 @@ App Engine - Platform as a Service - Scalable Application
 
 Standard Environment
 -- Free daily usage
+-- Milliseconds to be ready
+-- Low usage apps can be free
+-- Test locally with SDK
+-- Binary, runtime for JAVA, Python, Go,
+    -- No 3rd party apps
+    -- Can't write to Local
+    -- All requests will timeout after 60 seconds
+-- Sandbox
+    -- Scale/ Manage/ Fine Grained control
+1.) Develop/ Test the web locally
+2.) Use a SDK to deploy to App Engine
+3.) App engine autoscales/ reliably serves your webpage
+    -- Can access a variety of services using dedicated APIs
+
+Flexible Environment
+-- Specify container (Docker) on VMs
+    -- VM / App engine maintains this for you with Health Checks
+    -- Which geography/location of these VMs
+    -- Standard runtime can access containerized apps
+-- No autoshutdown
+-- Can use 3rd party apps
+-- Network access
+-- SSH abilities
+
+App Engine vs Kubernetes
+
+App Engine
+1.) People who want to take max control of their applications, deployment and scaling
+2.) Primary use: Web/ Mobile apps
+    -- Containers are a means to an end
+
+Kubernetes
+1.) Any language support
+2.) Container based workhorse
+
+
+APIs - Application Programming Interfaces
+-- Structured software for interface for consumers
+-- Abstracted / documented unnecessary information
+-- Versions of APIs
+
+Supporting APIs in two ways
+1.) Cloud Endpoints
+Example: Developing software. One of GCP's backend / backend APIs
+    -- Only consumed by developers you trust
+    -- Monitor log its used
+Answer: Cloud Endpoints - cloud console
+    -- Your choice of language/ client technologies
+
+2.) Apigee Edge (3rd party)
+    -- Plaform for making APIs available to your customers
+    -- Partners ind eveloping /managing proxies
+    -- Bussiness focus: Rate limiter, quotas analytics
+
+# Development in the cloud
+Git - own git instance
+-- hosted, 3rd party
+
+Cloud Source Repository
+-- Private git repository
+-- Source Viewer
+
+Event Driven Parts
+-- What provisioing resources to that new service?
+-- Cloud Functions Beta
+    -- Automatically run/ runtime binaries
+-- Create single purpose function that respond to events without server/ runtime
+-- You chose what events to watch, and triggers what cloud functionality
+
