@@ -442,9 +442,47 @@ Cloud Source Repository
 -- Source Viewer
 
 Event Driven Parts
--- What provisioing resources to that new service?
+-- What provisioning resources to that new service?
 -- Cloud Functions Beta
     -- Automatically run/ runtime binaries
 -- Create single purpose function that respond to events without server/ runtime
 -- You chose what events to watch, and triggers what cloud functionality
 
+Problem: Keeping track of environments manually => Lots of work
+-- Answer: Deployment Manager - Templates Declaration (infrastracture manager)
+    -- Creation and management of GCP resources for you
+    -- Template file (YAML/ Python) -> Components
+    -- Does all template direction
+        -- Edit YAML
+    -- Version control
+        -- Use YAML file
+
+Monitoring - Stack driver
+    -- Infrastructure
+    -- Debug,
+    -- Logger,
+    -- VM, container,
+    -- Metrics
+    -- Trace
+    -- Error
+-- Respond with information vs Panic
+-- Uptime checks, load balances, alerts with uptime/ errors
+-- Dashboards = customizable
+-- Logging - Metrics, alerts, dashboard
+    -- Cloud PubSub, Big Query
+-- Error reporting , new errors detected per URL statistics
+-- Debugger: production code to source with application state.
+
+# Google Cloud Big Data Solutions
+-- Integrated Serverless Platform
+    -- Fully managed custom solution
+    -- Apache Hadoop
+        -- MapReduce Programming model
+            -- 1 Function Map runs in parallel with massive dataset to produce intermediate results
+            -- 1 Function Reduce builds final result set with intermediate set
+    -- Dataproc
+        -- Manages Develop and deploy Hadoop/ spark/ Hive/ Pig on GCP
+        -- Creates clusters in 90 seconds or less
+        -- Scales clusters allowing you to integrate with Cloud Storage and stackdriver Logging
+        -- Coordinate and manage the lifecyle of clusters, which run until shutdown
+        -- You can resize your clusers even during job processing
