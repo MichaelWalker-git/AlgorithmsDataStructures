@@ -486,3 +486,118 @@ Git - own git instance
         - Scales clusters allowing you to integrate with Cloud Storage and stackdriver Logging
         - Coordinate and manage the lifecyle of clusters, which run until shutdown
         - You can resize your clusers even during job processing
+        - Request Hadoop cluster transferred to compute engine
+        - Monitor using Stack Driver
+        - Only pay for hardware resoruces used during life of clusters you create
+        - Rate is usually based on the hour, but Dataproc is billed by the second
+        - Save money by using...
+            - Preemptive compute engine instances, instead of using batch processing
+            - Restarted Cleanly (80% cheaper)
+        - Cluster costs: - SparkSQL for datamining
+        - MlLibrary to find patterns
+
+## Dataflow vs Cloud DataProc
+    - Dataproc = Known size and you have to manage the cluster size yourself
+    - Fully-managed service for transforming and enriching data in stream (real time) and batch (historical) modes with equal reliability and expressiveness
+    - Realtime data, unpredictable rate/ size
+    - Managed service, serverless
+        - Extract
+        - Transform
+        - Load batched computational data
+        - Continuous computation
+        - Uses data flow into a pipeline
+        - No need to spin up cluster/ instance; fully automated
+        - Frees you up from resource management and performance optimization
+        - ie.) Big Query (Service) -> (Transfer Pipeline/ Dataflow) -> Output A (Sink)
+        - Resources: on-demand
+        - Dynamic rebounding
+        - Large amount of data to one particular cluster
+        - Examples:
+            - General ETL tool; data analysis personalization
+            - Fraud detection of financial services
+            - Clickstream, point of sales, and segmentation analysis in retail
+            - IoT analytics in manufacturing, health care, and logistics
+        - Integration with...
+            - streaming event ingestion (Pub/Sub)
+            - Data warehousing (BigQuery)
+            - Machine learning (Cloud machine learning)
+
+## Big Query
+- Explore large sea of data
+- Storage and computation are searpate
+- adHoc SQL queries (syntax)
+- Low cost, region specific
+- No infrastracture for management
+- Pay as you go
+- Stream 100,000 rows per second
+- Re-write in Hadoop and Spark
+- Free monthly queries, 99.99% SLA
+- Access control
+    - People who use the tool, pay for their own queries
+    - Long term storage discount for data > 90 days
+- Real time analysis on petabytes of info
+
+## Pub/ Sub
+- Simple foundation for stream analysis
+- Independent apps to send/ receive message
+- Receive != synchronous
+- At least once delivery. Small chance that it is delivered twice
+- 1,000,000 messages per second; data arrives at high unpredictable rates (IoT as an example)
+- Great integration with GCP platform/ decoupling of services
+    - Ex.) Real time personalization in gaming
+        - Fast reporting, targeting, optimization in advertising and media
+        - Processing device data for healthcare, manufacturing, oil/ gas, and logistics
+        - Syndicating market- related data streams for financial services
+    - Syndicate data acorss projets and applications running on other clouds, or between cloud/ on-premise apps
+    - End to end encryption for your pipeline
+    - ie.) Applications/ Devices/ Databases -> Ingestion (Pub/Sub) -> Process (Dataflow) -> Analysis (BigQuery - warehousing, Machine Learning - Predicative analytics, BigTable - Caching/ Servicing)
+    - Project Jupyter - web based notebooks - Datalab -> Compute engine VM type/ GCP region
+        - Takes management of this technique
+    - Python interaction environment, explore your data
+    - Harnessing your data is no longer a problem
+    - Visualize with Matlab/ Google Data Studio
+
+# Machine Learning Platform
+- Has pre-trained models, and custom tailored models
+    - Machine learning models for large scale training on managed clusters
+- Range of services from NLP to Tensorflow
+- Tensorflow (Neural Networks)
+    - GCP = ideal place for it
+    - Tensor processing units
+    - TPU - 180 teraflops of data
+        - Google Cloud TPUs are a family of hardware accelerators that Google designed and optimized specifically to speed
+        up and scale up ML workloads for training and inference programmed with TensorFlow.
+        - TPUs are designed to deliver the best performance per dollar for targeted TensorFlow workloads, and to enable ML engineers and researchers to iterate more quickly.
+    - No upfront costs
+- Range of APIs for purposes
+    - Structured
+        -ML Classification using regression models for recommendations and abnormalities
+    - Unstructured data
+        - Image analytics (styles, flag control)
+
+## Cloud vision (insight)
+- Enables you to understand the content of an image by encapsulating powerful machine learning models in an easy to use REST API.
+- Classifies images into thousands of categories (e.g. "sailboat", "Eiffel Tower"),
+- Detects individual objects and faces within images, and finds and reads printed words contained within images.
+
+## Google Cloud Video Intelligence API
+- Makes videos searchable and discoverable by extracting metadata,
+- Identifying key nouns, and annotating the content of the video.
+- Can search every moment of every video file in your catalog and find each occurrence of key nouns as well as its significance.
+- Separate signal from noise, by retrieving relevant information by video, shot, or frame.
+
+## Google Cloud Speech-to-Text
+- Enables developers to convert audio to text by applying powerful neural network models in an easy to use API.
+- Recognizes 120 languages and variants, to support your global user base.
+- Can enable voice command-and-control, transcribe audio from call centers, and more.
+- Can process real-time streaming or pre-recorded audio, using Google’s machine learning technology.
+
+## Google Natural Language API
+- Reveals the structure and meaning of text by offering powerful machine learning models.
+- Extract information about people, places, events and much more, mentioned in text documents, news articles or blog posts.
+- Understand sentiment about your product on social media or parse intent from customer conversations happening in a call center or a messaging app.
+
+## Google Cloud Translation API
+- Provides a simple programmatic interface for translating an arbitrary string into any supported language.
+- Highly responsive, so websites and applications can integrate with Translation API for fast, dynamic translation of source text from the source language to a target language (e.g. French to English).
+
