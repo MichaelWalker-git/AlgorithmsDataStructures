@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db5bd529-cf7b-4938-9abc-3ae1bc015829" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GCP_Exam_Prep_Notes/Coursera_notes.md" beforeDir="false" afterPath="$PROJECT_DIR$/GCP_Exam_Prep_Notes/Coursera_notes.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -71,8 +70,8 @@
       <file leaf-file-name="Coursera_notes.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GCP_Exam_Prep_Notes/Coursera_notes.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="567">
-              <caret line="597" column="13" lean-forward="true" selection-start-line="597" selection-start-column="13" selection-end-line="597" selection-end-column="13" />
+            <state relative-caret-position="627">
+              <caret line="726" column="11" selection-start-line="726" selection-start-column="11" selection-end-line="726" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -292,19 +291,19 @@
       <workItem from="1502250704481" duration="1395000" />
       <workItem from="1502254740009" duration="193000" />
       <workItem from="1531768167426" duration="10852000" />
-      <workItem from="1531845602362" duration="3994000" />
+      <workItem from="1531845602362" duration="6878000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="16434000" />
+    <option name="totallyTimeSpent" value="19318000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Key Promoter X" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13662376" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.13662376" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
@@ -504,8 +503,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GCP_Exam_Prep_Notes/Coursera_notes.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="567">
-          <caret line="597" column="13" lean-forward="true" selection-start-line="597" selection-start-column="13" selection-end-line="597" selection-end-column="13" />
+        <state relative-caret-position="627">
+          <caret line="726" column="11" selection-start-line="726" selection-start-column="11" selection-end-line="726" selection-end-column="11" />
         </state>
       </provider>
     </entry>

@@ -601,3 +601,127 @@ Git - own git instance
 - Provides a simple programmatic interface for translating an arbitrary string into any supported language.
 - Highly responsive, so websites and applications can integrate with Translation API for fast, dynamic translation of source text from the source language to a target language (e.g. French to English).
 
+# GCP Foundations
+- Jenkins - open source continuous integration environment
+    - Define jobs in Jenkins
+        - Perform scheduled jobs/ build of software backing up data
+        - Build and maintained by Bitmain
+        - Template system = deployment manager
+    - Deployment manager -> GCP service, uses templates written in a combination of YAML, Python and Jinja2
+        - VM machine created
+            -Allocate of GCP resources, perform setup tests
+    - SSH over Jenkins
+
+## Virtual Network
+- Google uses software defined networks (SDN)
+- Global fiber network
+- Resources are services, and are not hardware
+
+## Google VPC - Virtual Private Cloud Objects
+- Virtual Private Cloud (VPC) gives you the flexibility to scale and control how workloads connect regionally and globally.
+- When you connect your on-premises or remote resources to GCP, you’ll have global access to your VPCs without needing to replicate connectivity or administrative policies in each region.
+- Fine grained networking policies
+- Projects encompass every service
+- Routes/ firewalls
+- IP, protocol forwarding, loading balancing, cloud DNS , VPN tunnels
+- Networks
+    - Default
+    - Auto
+    - Custom
+- VPC -> IP Address (external/ internal)
+- VM
+    - Setup or Configure
+
+# Attributes of a VPC
+- Global
+    - A single Google Cloud VPC can span multiple regions without communicating across the public Internet. Single connection points between VPC and on-premises resources provides global VPC access, reducing cost and complexity.
+- Sharable
+    - With a single VPC for an entire organization, teams can be isolated within projects, with separate billing and quotas, yet still maintain a shared private IP space and access to commonly used services such as VPN or Cloud Interconnect.
+- Expandable
+    - Google Cloud VPCs let you increase the IP space of any subnets without any workload shutdown or downtime. This gives you flexibility and growth options to meet your needs.
+- Private
+    - Get private access to Google services, such as storage, big data, analytics, or machine learning, without having to give your service a public IP address. Configure your application’s front end to receive Internet requests and shield your back-end services from public endpoints, all while being able to access Google Cloud services.
+- Transparent
+    - Use VPC flow logs for near real-time (5-second interval) logging to monitor your deployment for both performance analysis and network forensics. This allows you to keep your deployment running securely and at peak efficiency.
+
+## IP Address
+- Each virtual machines has two kinds of IP addresses
+    - Internal (Assigned by DHCP)
+        - Renewed every 24 hours
+        - VM name and IP address registered with networked scoped DNS
+        - Each has a hostname resolved to an internal IP address
+            - Hostname is the same as an instance name
+            - Fully Qualified Domain Name - FQDN = [hostname].c.[project-id].internal
+        - Name Resolution
+            - Provided as part of Computer Engine
+            - Configured for use via DHCP
+            - Provides answer for internal/ external addresses
+        - DNS = particular instance
+            - metadata for local /queries for public DNS resolution
+            - Stores map from external to internal
+    - External (Assigned by pool)
+        - Reserved (static)
+        - VM doesn't know IP, mapped to internal IP
+        - Instance with external IP address can allow connection from hosts outside of project
+            - User directly using external IP addresses
+            - Admin publicizes DNS records points to instance
+            - Public DNS records are not published automatically
+        - DNS records can be published using existing DNS
+        - DNS zones can be hosed using Cloud DNS, instead of using VM bin server
+            - Create, update, remove records manually with API
+            - Zone, configure domain DNS to use
+    - Alias IP addresses
+        - range of internal ip addresses that can act as aliases to VM primarily for network interface
+        - Useful if you have multiple VMs, you want to assign each service as a different IP Address
+        - Multiple IPs on VM, representing different containers/ Applications without defining separate network interfaces
+
+## Routes and Rules
+- Every network has routes, allowing instances into the network to send trafffic directly to each other, even across subnets
+    - Every network has default routes that direct packets to destination outside of networks
+    - Special routes which can override these routes
+    - Firewalls must allow packets to route
+        - Default - internetwork traffic is okay
+        - Manually created = blocked
+- Routes
+    - Match packets by destination IP Address
+    - Created when networks are created
+    - Created when subnets are created
+    - Allows Vms on same subnetwork communication
+- Virtual network router consults writing table of instance before hopping to next VM at top layer before being forwarded
+- Firewall protects both ingress/ egress connections
+    -Every VPC has a firewall,
+    - Connections are allowed and blocked on instance level
+- Firewall rules
+    - Direction, source/destination, protocol/port/action, priority, rule assignment
+    - Express desired direction of rule (inbound rules) for ingress connections
+        - Protocol, port of connection
+        - Any rule can be restricted to apply to specific protocols/ ports
+    - Source tags can be used in VM to VM connections.
+    - Route -> Instance
+        - If network / instance stack matter then you can apply rules to all instances within that stack
+        - Uses collection to create read only routing tables for each instance
+        - Scalable
+    - Rule assignment is for specific instances
+        - Egress firewall can be an IP range
+- Billing
+    - Free Tier
+        - Ingress to GCP
+        - Egress to same zone
+        - Egress to different GCP service in same region
+        - Other Google products in same region
+    - $0.01 / Gb
+        - Zones, same region
+        - Regions within US
+    - Varied
+        - Regions, not including traffic between US regions can vary
+
+# Common Network Design
+- Rich set of alternatives for managing groups of resources with varying resources with varying availability/ access control requirements
+- Explicitly manage network, routes, firewalls -> Granular control
+- Example 1 - Availability
+    - One Project
+        - One Network
+            -One Region
+                - One Subnetwork
+                    - Multiple zones
+- Example 2
