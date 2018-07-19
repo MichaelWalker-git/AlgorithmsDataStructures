@@ -871,7 +871,90 @@ Git - own git instance
     - Each local SSD is 375 GB in size, but you can attach up to eight local SSD devices for 3 TB of total local SSD storage space per instance.
         - Local SSDs are suitable only for temporary storage such as caches, processing space, or low value data.
     - Optionally, you can format and mount multiple local SSD devices into a single logical volume.
-
     - Unlike persistent disks, local SSDs are physically attached to the server that hosts your virtual machine instance.
     - This tight coupling offers superior performance, very high input/output operations per second (IOPS), and very low latency compared to persistent disks.
+- In-memory RAM Disks
+    - High-performance, enterprise-class memory that you can use to run your applications.
+    - Allocate some of this memory to create a RAM disk with exceptionally low latency and high throughput.
+    - Work well when your application expects a file system structure and cannot simply store its data in system memory.
+    - Alone do not provide any storage redundancy or flexibility, so it is best to use RAM disks in combination with other instance storage options.
+    - Share instance memory with your applications. If your instances do not have enough memory to contain RAM disks and your applications, create instances with high-memory machine types or upgrade your existing instances to add more memory.
+- Cloud Persistent Disks
+    - Single File system
+    - Resize disks and file system
+    - Built in redundancy -> built in snapshot
+    - Autoencryption
+
+## Common actions
+1.) Move Instance
+    - Automate move within region - gcloud compute instances move
+    - Update refs to Vm, not automatic
+2.) Manual Process (Between regions)
+    - Snapshot all persistent disks on source VM
+    - Create new persistent disk in destination zone restored from snapshots
+    - Create new VM in destination zone, attach new persistent disks
+    - Assign static IP to new VM
+    - Update refs to VM
+    - Delete snapshots, original disks, original VM (Cleanup)
+
+## Snapshots in CLoud Storage
+- Transferring data to different disks, region, zone
+- Disk snapshot
+    - only to persistent disk not local
+    - Create instances/ configure instance templates
+    - Periodic backups
+    - Incremental, full image backup
+- Snapshots can be restored to a persistent disk allowing for a move to a new zone
+    - Prepare persistent disk to freeze/ unmount (better option)
+    - Stop any apps from read/ write
+- Resize persistent disk
+    - Improve input/output performance only grows
+
+## IAM Hierarchy of Security Model
+- High level organization -> members -> Services
+- Email like address - high roles
+- Who - What (Priviledges, actions) - which resources
+- Org -> Folder -> Project -> (Resource, Resource)
+- Object -> Folders -> Projects -> Members -> Roles -> Resources -> Products -> G-Suite Admin
+- Org Node
+    - Admin/creator
+    - Useful for audit
+    - Created by Google Sales
+        - Org-Owners established at creation
+    - Org Owners
+        - Assign organization admin from G-Suite admin onsole
+        - Always have more than one org owner
+- Folder - Sub organization
+    - Model different team/ org/ legal entities
+    - Can contain sub-folders etc
+    - Can contain projects
+- Roles
+    - Organization
+        - Admin
+        - Viewer
+    - Folder
+        - Admin
+        - Viewer
+        - Creator
+    - Project
+        - Creator
+        - Delete
+-G Suite Super Admin
+    - Administers a Google hosted domain
+    - Created users/ groupts
+    - Assigns a GCP owner for GSuite Admin console
+    - Creates control over membership into groups
+        - Google hosted domains
+
+## Best practices
+1.) Principle of LEast Privilege
+2.) Different Groups (SeCOPs)
+    - Admin
+    - Log Viewer (Audit)
+        - Audit Policy Changes:
+            - If a group membership = secure, then assign roles to groups
+            - Let GSuite admins handle membership
+            - It is a high security risk to assign roles directly
+3.) Policies
+
 
