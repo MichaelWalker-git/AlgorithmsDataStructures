@@ -724,4 +724,154 @@ Git - own git instance
             -One Region
                 - One Subnetwork
                     - Multiple zones
-- Example 2
+    - Pros:
+        - Increased Availability
+        - Simplified security
+- Example 2 - Globalization
+    - One Project
+        - One Network
+            - Multiple Regions
+                - Two Subnetworks
+    - Pros:
+        - Load Balancer
+        - High scalability
+        - Subnetwork connections span networks
+- Bastion Host Isolation
+    - External point of entry - enable/disable SSH
+        - pecial purpose computer on a network specifically designed and configured to withstand attacks.
+        - The computer generally hosts a single application, for example a proxy server, and all other services are removed or limited to reduce the threat to the computer.
+        - It is hardened in this manner primarily due to its location and purpose, which is either on the outside of a firewall or in a demilitarized zone (DMZ) and usually involves access from untrusted networks or computers.
+    - Maintenance host to connect to internal instances only available to those within internal avail. network
+    - Instances used as jump host
+       - External connections via SSH, used to connect to internal instances
+    - Be sure to harden bastion host
+        - Limit Classless Inter-Domain Routing range of source IPs connecting to Bastion
+        - Firewalls rules allow SSH traffic to private instances only from Bastion
+    - By using a bastion host, you can connect to an instance that does not have an external IP address. This approach allows you to connect to a development environment or manage the database instance for your external application, for example, without configuring additional firewall rules.
+
+      A complete hardening of a bastion host is outside the scope of this article, but some initial steps taken can include:
+
+      Limit the CIDR range of source IPs that can communicate with the bastion.
+      Configure firewall rules to allow SSH traffic to private instances from only the bastion host.
+      By default, SSH on instances is configured to use private keys for authentication. When using a bastion host, you log into the bastion host first, and then into your target private instance. Because of this two-step login, which is why bastion hosts are sometimes called "jump servers," you should use ssh-agent forwarding instead of storing the target machine's private key on the bastion host as a way of reaching the target machine. You need to do this even if using the same key-pair for both bastion and target instances, as the bastion has direct access to only the public half of the key-pair.
+
+# Virtual Machines / Compute Engine
+- Most common infrastructure component
+    - Micro- cpu share with other VMs != not possible real hardware
+    - Lower capacity at lower costs
+    - Some VM have burst capacity
+        - Above rated capacity for brief time
+    - CPU and memory disk as an option
+- Spectrum of options
+    - Run in whatever language
+    - Autoscaling
+    - Enterprise level apps
+    - Portability
+    - IAAS -> Phsyical servers within Google environemnt
+        - How much memory, disk, cores (CPUs)
+        - Several features
+            - Right sizing
+            - Metadata,
+            - Availability
+            - Startup scripts
+- Compute Options
+    - High memory or High CPU
+    - Shared Memory Core Types
+    - Custom
+
+    - Remember Scale at 2GB/ sec for each CPU core ===  16 GB / sec throughoutbit (8 core)
+
+    - vCPUs = 1 hyperthreaded core; 2 vCPUs === 1 physical core
+- Disk Options
+    - Standard, SSD
+    - Local SSD
+        - Higher throughput/ lower latency
+            - Doesn't stop billing until deleted or stopped
+        - Swap disk
+    - 8 * 375 local SSD => 3 Terabytes per instance
+    - 8 * 375  Regular => 64 Terabytes per instance
+
+- Networking
+    -Regional/ networking load balancing HTTPS
+   - No -Pre-warming necessary
+
+- Pricing / Billing
+    - Per second billing
+    - Sustained Use discounts
+        - 25% off for sustained use for a month
+        - Auto applied
+        -Inferred resource - same machine/ same region
+        -Combined Resources
+        -Committed Use contracts
+    - Min Time: 1 minute
+    - Pre-emptive instances
+        - Live at any point for 24 hours
+        - Up to 80% discounts
+        - 30 second notification via API that the instance will be used elsewhere/ terminated
+    - Recommendations given for utilization
+
+## VM Access/ Priviledge
+- Lifecycle
+    - Provisioning
+        - CPU / Memory
+        - Root/ Persistent
+        - Add Disks
+    - Staging
+        - IP Addresses (Internal/ External)
+        - System image
+        - Boot
+    - Running
+        - Startup script
+        - Access SSH
+        - Modify Used
+            - Export system
+            - Snapshot
+            - Move VM to different Zone
+    - Stopping
+        - Shutdown scripts
+    - Reset
+        - Shutdown/ reset take about 90 seconds
+    ** Premptive VMs
+        - No live migration
+        - No auto restart
+        - Great for batch processing
+- When a VM is terminated, it is restarted by default
+
+## VM Compute Options
+- Web Console
+    - Command line/ REST
+- Shared Resources Apps
+    - Great for running small non resouce intensive apps
+- Standard
+    - 3.75 GPU
+    - 64 vCPU
+    - 240 gB of Ram
+
+## Images
+- Gcloud included in image
+- Public vs Private
+- Linux/ Window
+- Per sec charge except SQL (per min.)
+- Import images
+- Share custom images
+
+## Disk
+- Bootable, durable, can survive if instance is deleted
+- Not physcally tied to instance,
+- Can't migrate between regions
+- Snapshots
+- Dynamically resize
+- You can attach a non-boot persistent disk to more than one virtual machine instance in read-only mode
+    - Allows you to share static data between multiple instances.
+    - Sharing static data between multiple instances from one persistent disk is cheaper than replicating your data to unique disks for individual instances.
+- Locally attached to VM
+    - Data can survive reset
+    - Data does not survive when terminated or stopped
+    - Compute Engine offers always-encrypted local solid-state drive (SSD) block storage for virtual machine instances.
+    - Each local SSD is 375 GB in size, but you can attach up to eight local SSD devices for 3 TB of total local SSD storage space per instance.
+        - Local SSDs are suitable only for temporary storage such as caches, processing space, or low value data.
+    - Optionally, you can format and mount multiple local SSD devices into a single logical volume.
+
+    - Unlike persistent disks, local SSDs are physically attached to the server that hosts your virtual machine instance.
+    - This tight coupling offers superior performance, very high input/output operations per second (IOPS), and very low latency compared to persistent disks.
+
