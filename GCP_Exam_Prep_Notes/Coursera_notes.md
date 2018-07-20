@@ -875,3 +875,32 @@ Git - own git instance
     - Unlike persistent disks, local SSDs are physically attached to the server that hosts your virtual machine instance.
     - This tight coupling offers superior performance, very high input/output operations per second (IOPS), and very low latency compared to persistent disks.
 
+### Multiregional
+- Website content, work load,s mobile/gaming apps
+- vs Kubernetes,/ compute engine clusters
+
+### Nearline Storage
+- 30 day minimum
+- Accessible no more than one time / month
+
+### Coldline
+- 90 day minimum
+- Good to access once a year
+
+Definition: **Storable** - Data is durable and safe. Maybe not readibly available.
+
+Cloud Storage
+- Buckets 
+	- Naming required
+	- Cannot be nested
+- Objects
+	- Inherit storage
+	- No minimum size
+	- Unlimited storage
+- Access
+	- GSutil command
+	- Restful - JSON api
+		- XML API
+		
+### Work flow
+- 
