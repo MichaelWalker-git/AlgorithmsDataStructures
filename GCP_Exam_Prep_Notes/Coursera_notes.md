@@ -967,24 +967,35 @@ Git - own git instance
             - It is a high security risk to assign roles directly
 3.) Policies
 
-## Roles
-1.) Primitives - original
-    - Owner (invite)
-    - Editor (Modify/ Delete)
-    - Viewer
-    - Billing
-2.) Curator
-    - Granulated control
-    - Collection of permission
-    - Role = abstract function
-    - Compute Engine instance -> broken down into service, resource, verb
-    - Corresponds with action of REST API
-    - Product Specific Resources (BETA)
-3.) Custom
-    - Project Specific
-        - Equivalent to primitive roles
-    - Product Specific
-        - Compute Engine, Cloud Storage, Logging, Etc
+### Multiregional
+- Website content, work load,s mobile/gaming apps
+- vs Kubernetes,/ compute engine clusters
+
+### Nearline Storage
+- 30 day minimum
+- Accessible no more than one time / month
+
+### Coldline
+- 90 day minimum
+- Good to access once a year
+
+Definition: **Storable** - Data is durable and safe. Maybe not readibly available.
+
+Cloud Storage
+- Buckets
+	- Naming required
+	- Cannot be nested
+- Objects
+	- Inherit storage
+	- No minimum size
+	- Unlimited storage
+- Access
+	- GSutil command
+	- Restful - JSON api
+		- XML API
+
+### Work flow
+-
 
 ### Members - Who?
 - Users
