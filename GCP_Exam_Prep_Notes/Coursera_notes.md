@@ -228,8 +228,18 @@ More generous policies overrides (IMPORTANT)
 # Cloud Data Storage Options
 ## Cloud Storage
 - Object file system storage. (Binary immutable Objects)
+    - Buckets
+        - Bytes of data with unique key
+        - Directory (Object point to another object)
+        - Store Blobs of information
+        - Not easy to index all of the files
+    - Storage Classes
+        - Regional
+            - Store data at a lower cost; tradeoff is that data is being stored in specific regional location, instead of redundancy
+        - Multi-regional
+            - Redundancy
+            - Seperate
 - Encrypts data before writing to disk
-- Bytes of data with unique key
 - fully managed, no capacity limit, provision capacity
 - Example: website, data, cluster, large files for download
 - Buckets for objects.
@@ -957,4 +967,105 @@ Git - own git instance
             - It is a high security risk to assign roles directly
 3.) Policies
 
+## Roles
+1.) Primitives - original
+    - Owner (invite)
+    - Editor (Modify/ Delete)
+    - Viewer
+    - Billing
+2.) Curator
+    - Granulated control
+    - Collection of permission
+    - Role = abstract function
+    - Compute Engine instance -> broken down into service, resource, verb
+    - Corresponds with action of REST API
+    - Product Specific Resources (BETA)
+3.) Custom
+    - Project Specific
+        - Equivalent to primitive roles
+    - Product Specific
+        - Compute Engine, Cloud Storage, Logging, Etc
 
+### Members - Who?
+- Users
+    - Google Accounts,
+    - G-Suite Domains,
+    - Groups
+        - Easy way to apply permissions
+        - Access to users
+    -Cloud identity domains
+    - GCP does not manage or create users/ groups
+        - GSuite admin does this for you
+- Service Account
+    - Identification for carrying out server to server interaction in project without supplying your credentials
+    - Used to authenticate from one service to another
+        - Programs using Compute Engine instances can automatically acquire access tokens with credentials
+        - Token used to access any Service API in your project/ other service that granted access to that account service
+        - Convenient when not accessing user data
+    - ID by email address
+    - Type
+        - User created
+        - Google API account service
+            - Runs internal Google processes with write access
+        - Default compute engine service account
+            - Auto enabled on all instances using gCloud / GCP console
+- Scopes Identifies the User can do WHAT?
+    - Legacy Method
+    - Read only
+    - Write
+    - ID -> Cloud IAM -> Role -> Resources
+    - Ability to slice up VM into separate microservices
+    - Service Account (with GCP managed Keys) vs. User managed
+        - User managed keys are downloadable, key rotation service available
+    - Leverage Resource Hierarchy
+        - USe projects to group resources that share trusted resources
+        - Check policy granted on each resource
+        - Understand inheritance
+        - Least privilege access
+        - Audit membership
+        - Group policies log
+- Best practices
+    - Grant Roles to Google Groups
+    - Use multiple groups
+    - Give it a display name, clearly defining its purpose
+    - Establish a naming convention
+    - Establish a key rotation, convention/ method
+    - Service Account users can be dangerous, be wary
+    - Audit with serviceAccount.key_list()
+    - Use Cloud IAP
+        - Identity - aware Proxy
+            - Building block toward BeyondCorp, an enterprise security model that enables every employee to work from untrusted networks without the use of a VPN.
+        - Central Auth layer
+        - Access control
+        - ie.) User -> IAP (checks identity) -> ERP / CRM (Guard gate)
+
+# Data Storage Services
+- Variety
+    - How similarily structured / variable data is
+- Velocity
+    - How fast data comes
+- Volatility
+    - How long data retains values, accessible
+
+## Decision Tree
+- Data Structure?
+    - No
+        - Cloud Storage
+    - Yes
+        - Analytics?
+            - No
+                - Relational?
+                    - No
+                        - Datastore (NoSQL)
+                    - Yes
+                        - Needs to be horizontally scalable?
+                            - No
+                                - Cloud SQL
+                            - Yes
+                                - Cloud Spanner
+            - Yes
+                - Updates/ Low latency
+                    - Yes
+                        - Cloud Big Table
+                    - No
+                        - Big Query
