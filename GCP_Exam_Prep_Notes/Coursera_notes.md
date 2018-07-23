@@ -207,23 +207,81 @@ More generous policies overrides (IMPORTANT)
 
 ## Cloud Router - enables dyanmic gateway protocol to access the topography of a VPC with an onsite premise network
 - share route information over VPN
+    - Provides Border Gateway Protocol (BGP)
+        - Dynamically discover/ advertise
+    - Standard routing features
+        - As a path
+        - As a prepend
+
 - enables dynamic VPC use
 - ie.) Add subnet to VPC + on premise network will get routes to be seen
 
-## Direct Peering - connect any business network to Google
-- Customer doesn't want to use the public internet
-- Peering = router in same public data center as a google point of presence, exchanging traffic
-- Not covered by SLS
+# Elastic Cloud Infrastucture
+    - Scaling/ Automation
 
-## Dedicated Interconnect
+## Dedicated Cloud Interconnect
+- Acting as a intermediary network service provider
+    - Backup / low latency; sensitive / lower costs between Google and you
+    - Direct connection with on-premises Google, may be cheaper than ISP
+    - Large amount of data transfer
+        - Will be cheaper than public internet
+        - Dedicated network, less drops; internal connections/ on premises
+        - 10 GB/ sec * 8 connections
+            - Minimum agreement: 10 GB/ sec; if throughput is less, consider Google VPN
+            - Client must meet at colocation facility (physical), singe mode Fiber
+            - Client will order and operate circuits
+- VPN
+    - One or more secure tunnels
 - Physical connection, lower latency, higher availability.
-- Direct connection with on-premises Google, may be cheaper than ISP
 - Great for companies that have data intensive apps.
 
-## Carrier Peering
+## GCP Networking
+- Global fiber backbone/ networking
+    - HTTP, UDP, TCP. Load Balancer
+    - Cloud CDN
+    - Cloud DNS
+- Virtual Networks
+    - SDN Network visualization
+    - Granular subnetworks
+    - Hybrid (Cloud VPN routes, interconnect)
+
+## Google Cloud VPN
+- Securely traffic netowkr to your on premise network to your GCP VPC via your IPSec VPN
+    - Encrypted by one gateway, decrypted by another VPN gateway
+    - SLA of 99% availability
+    - VPN on GCP = Software
+    - With static routing, updating the tunnel require the additional use of static routes; restart needed to include subnet
+
+## External Peering
+### Direct Peering - connect any business network to Google
+- Customer doesn't want to use the public internet
+    - Peering = router in same public data center as a google point of presence, exchanging traffic
+- Connect your business network directly to Google at any of 100+ locations in 33 countries around the world and exchange high throughput cloud traffic.
+- Allows you to establish a direct peering connection between your business network and Google’s.
+    - Be able to exchange Internet traffic between your network and Google’s at one of our broad-reaching Edge network locations.
+
+- Direct peering with Google is done by exchanging BGP routes between Google and the peering entity.
+    - After a direct peering connection is in place, you can use it to reach all of Google’s services including the full suite of Google Cloud Platform products.
+- Google - [] - [] - Corporation
+- Border Gateway Protocol (BGP) -
+   - Route traffic coming through ISP who are assigned their own ASN
+   - Shared VPC
+        - Share GCP GCP networks across projects
+            - Apply, enforce consistent policies
+- Not covered by SLS
+
+### Carrier Peering
 - higher avail
 - lower latency
 - enterprise grade network servers using server proxies.
+- For access to Google applications, such as G Suite, you can obtain enterprise-grade network services that connect your infrastructure to Google by using a service provider.
+- When connecting to Google through a service provider, you can get connections with higher availability and lower latency, using one or more links. Work with your service provider to get the connection you need.
+- Use case:
+    - To access G Suite applications from an on-premises network, an organization might need a DMZ (perimeter network) to reach Google's network.
+    - Enables organizations to expose an isolated subnetwork to the public Internet instead of their entire network.
+    - Instead of setting up and maintaining a DMZ, the organization can work with a service provider so that their traffic travels on a dedicated link from their systems to Google.
+    - With the dedicated link, the organization gets a higher availability and lower latency connection to Google's network.
+
 
 # Cloud Data Storage Options
 ## Cloud Storage
@@ -1227,3 +1285,31 @@ Cloud Storage
                         - Cloud Big Table
                     - No
                         - Big Query
+
+# Cloud Resource Manager
+- Provides a resource container such as Organization, Folders, and Projects that you allow to group and hierarchy organize other Cloud Platform resources
+    - Allows you to modify yoru Cloud Identity and Access Management policies for your organization and folder
+    - Can edit projects directly
+- Projects own rerouces
+    - Images, snapshots, networks are now global resources
+- External IP -> Region
+- Instances/ Disks - Global
+
+- Quotas
+    - All resources that you create, subject to quotas, limit
+    - 5 networks
+    - 300 administrative requests per minute
+    - Proactive request quota adjustments
+    - Project quotas prevent run away consumption in billing spikes/ surprises
+- Labels/ Names
+    - Key: value pair designation for organization of GCP resources
+        - VM, disk, snapshot, image
+        - Console, gcloud or API
+    - Distinguish component / instances -> billing
+        - Primary contact
+        - Define their state
+- Tags
+    - Applicable to instances only
+    - Used for networking (firewall rules)
+- Billing
+    - Budget / notifications
