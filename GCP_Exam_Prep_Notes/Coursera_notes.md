@@ -233,12 +233,52 @@ More generous policies overrides (IMPORTANT)
         - Directory (Object point to another object)
         - Store Blobs of information
         - Not easy to index all of the files
-    - Storage Classes
+    - Storage Classes (Moving classes requires gsutil command)
         - Regional
             - Store data at a lower cost; tradeoff is that data is being stored in specific regional location, instead of redundancy
         - Multi-regional
             - Redundancy
-            - Seperate
+            - Separate
+        - Cloud IAM
+            - Goes to ACL
+                - Goes to Signed URL + Valet Key via ticket
+                - Signed document policy
+            - Access to Project
+            - Access to bucket
+            - Access to Object
+        - ACL
+            - Timed access is possible
+                - Who can access it
+                - What level of access
+                - One / more entries
+                    - Scope/ Permission
+        - Cloud storage features
+            - Customer supplied encryption keys
+                - Persistent disks to VMs
+                - Allows you to supply your own encryption keys
+            - Object lifecycle management
+                - Auto delete/ archive object
+                - OBject versiinoning
+                    - Charged for additional versions as multiple files
+                        - Archive when delete or overwite
+                - Directory syncronization
+                - Data import, strong consistency
+                - Object change notifier - Watch request
+                    - PUB/ SUB (recommended) - cost effective/ faster
+                - Can setup use cases for setting up to live , archive older, delete or downgrade storge classes (coldline storage)
+    - How to transfer data?
+        - Storage transfer service
+            - High performance on online data
+            - Destination: Cloud Storage Bucket/ Amazon S3 bucket/ HTTP/ HTTPS
+        - Google transfer appliance
+            - High capacity storage server leased from Google
+                - Connect to network, load data, and ship
+        - Offline media transfer
+            - 3rd party service, where physical media such as storage arrays, harddrive disks, tapes, usb flash drives sent to provider who then uploads the data
+    - Strong consistency in data
+        - Write/ read - immediately availble, no stale data
+        - Deletes - immediately
+        - Object listing
 - Encrypts data before writing to disk
 - fully managed, no capacity limit, provision capacity
 - Example: website, data, cluster, large files for download
@@ -280,9 +320,10 @@ More generous policies overrides (IMPORTANT)
     - Once a year; min allowed time: 90 days
 
 ## Cloud Data Store
+- Persistent hashmap
 - noSQL, structured data
-- ACID transactions, SQL-like queries, indexes
-- Automatically handles sharding/ replication
+    - ACID transactions, SQL-like queries, indexes
+-    Automatically handles sharding/ replication
 - Transactions using indexed properties
     - Multirow queries
 - can be integration point
@@ -293,45 +334,151 @@ More generous policies overrides (IMPORTANT)
 - The billing model is very different:
      - Datastore charges for read/write operations, storage and bandwidth
      - Bigtable charges for 'nodes', storage and bandwidth
+- Features
+    1.) Filter objects on property
+    2.) Update granularity : attribute
+    3.) Write is a put object
+    4.) Stores structured data from App engine apps paired with mem cache - "Cached miss"
+        - Repeatedly read
+    5.) Sharding Replication
+    6.) SQL like queries transactional database indexes
+    7.) Category of Object = kind
+        - Object = entity
+        - Individual data = property
+        - Unique id = id
+- Great for:
+    - Schema will change and needs to be adaptable for DB
+    - Scale down to zero
+    - Low maintaince and overhead
 
 
 ## Big Table
 - noSQL, data analysis
-- Single key look-ups, indexed by a single Row key.
+    - Single key look-ups, indexed by a single Row key.
+    - Read - scan rows
+    - Write - Put rows
+        - Use Row Key - ideally, singled keyed data with low latency
+        - Analytical / operation
+            - Financial analysis
+            - Search/Map/ gmail
+        - Interact
+            - Multiple client libraries
+            - Batch map/ reduce
+            - Stream processing/analytics
+            - Machine learning applications
 - More like IAAS, single region
-- HBase (Sql like queries), Hadoop portability
-- Atomcity on one row, no transactions
+- HBase (SQL like queries), Hadoop portability
+    - Incredible scalability
+        - Scales in direct proportion to the number of machines in your cluster
+        - Self managed HBase installation has a design bottleneck that limits the performances after a certains QPS is reached
+        - Cloud BigTable does not have this bottleneck, and can handle more queries
+    - Simple Administration
+        - Handles upgrades and restarts transparently, and auto maintains high data durability
+        - Replicates your data by simply adding a cluster to your instances
+        - Replication starts automatically
+    - Cluster resizing without downtime
+        - Can increase the size of a Cloud Big Table cluster for a few hours to handle a large load
+        - Reduce the cluster's size without any downtime
+- Atomicity on one row, no transactions
 - Structure data / flexible schemas,
-- Sparely populatd rows
-- Billions of rows, don't need to reconfigure
-- Persistent hash tables
+    - Sparely populated rows
+    - Billions of rows, don't need to reconfigure
+    - Persistent hash tables
+    - Blocs of continous rows are called tablets
+        - Tablets are stored on Colossus, Google's file system, in SSTable format
+            - Provides a persistent orderedm immutable map of keys to values
+            - Both keys and values are arbitrary bytes of strings
+            - All writes are stored in Colosuss's shared log as soon as they are acknowledged
+    - Data is never stored in Big Table nodes themselves
+        - The node has pointers to a set of tablets that are stored on Colossus
+            - Rebalancing tablets from one not to another is very fast, because actual data is not copied, Big Table simply updates the points for each node
+            - Recover from the failure of a Cloud Big Table is very fast, only metadata  needs to be migrated to the replacement node
+            - When node fails, no data is lost
 - Very low latency
 - Handles upgrades easily, highly scalable
 - Encryption
-- Example: From application database stream to spark storage. batch processes, summarize down
-- Uses: iOT, user analytics, financial documents
+- Example:
+    - Uses: iOT, user analytics, financial documents
+        - Time-Series data
+            - CPU and memory usage over time for multiple servers
+            - Marketing data
+                - Purchase history, customer preferences
+            - Financial Data
+                - Transaction histories, stock prices, currency exchange rates
+            - IOT
+                - Usage Reports from energy meters and home appliances
+            - Graph data
+                - How things relate to one another.
+    - From application database stream to spark storage. batch processes, summarize down
+    - Ideal for applications that need very high throughoutput and scalability for non-structured key/value data
+        - excels as a storage engine for batch MapReduce operations
+        - Stream processing/ analytics
+        - Machine learning applications
 
 ## Cloud SQL
-- DB Schema 0 consitent
+- DB Schema 0 consistent
+- TB of info
+- Two ways
+    - Directly insert SQL Queries or install SQL server on VM inside of Compute Engine
+    - Benefits of Cloud SQL over GCP
+        - Fully managed =  patches and updates auto applied
+        - Administer users with Cloud Shell
+            - SQL Workbench tool
+            - mySQL Drivers
+    - 2nd generation of CloudSQL
+        - Higher throughput and storage capacity
+        - InnoDB = Storage
+    - 1st generation
+        - Only works with mySQL 5.5
+        - IPV6 Connectivity
+- Standard vs Cloud SQL functionality
+    - User defined function != supported
+    - Cloud SQL
+        - Replicate data between multiple zones
+        - Audit, failure
+        - Backup.
+    - Connecting - via IP address (not for Production)
+        - Temporary whitelist IP
+            - administer tasks
+                - Require mySQL command line
+        - Configure SSL certificates for Cloud SQL instance
+            - Connect to mySQL client via SSL
+        - Cloud SQL Proxy
+            - Run local client
+        - Native mySQL privileges
+        - Secure access noSSL, communicate with proxy tunnel
 - Transaction is all or nothing; Bank example
 - mySQL, postGreSQL (beta)
 - Managed service or server in VM compute engine
     - Read duplicates
 - Replica service during outage
 - On demand/ schedule batch
-- Google secruity
+- Google security
 - Scale vertically with machine type
 - SQL workbench with other apps
 
 ## Cloud Spanner
 - Virtually unlimited horizontal scalability and 99,999% service-level agreement (SLA)
-- Pentabytes of data
 - Relational database service with transactional consistency
-- Schemas, SQL, auto synchronous replication, high availability
-- Outgrown RDS (AWS)/ sharding databases for throughput high performance
+    - PetaBytes of data
+    - Schemas, SQL, auto synchronous replication, high availability
+    - Outgrown RDS (AWS)/ sharding databases for throughput high performance
+    - Thousands of Nodes
+- Acid SQL like transactions
+- Auto sync replicatioon
 - Cross-table transactional support: transactions can span across multiple tables—doesn’t have to be limited to a single table (unlike Apache HBase or Apache Kudu).
 - Need global data
+- Strenghts
+    - Strongly consistent secondary indexes
+    - SqL statements with altered statemends
+    - Managed instances
+    - Database consolidation
+    - IAM policies
+    - Replicication using G-Fiber
+    - Atomic clocks, timestamp bound
+    - Database split
 - Examples: Finance and investment industry
+    - KInventory Ap
 
 # Introduction to Containers
 Alternate to hardware
