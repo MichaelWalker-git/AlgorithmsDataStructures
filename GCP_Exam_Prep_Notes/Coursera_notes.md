@@ -1635,3 +1635,102 @@ Cloud Storage
     - Used for networking (firewall rules)
 - Billing
     - Budget / notifications
+
+# Reliable Cloud infrastructure - Design / Process
+- Defining the service
+    - Rough design
+    - Structured Design
+        - Ask Questions
+    - Measurable
+        - Define goals
+        - Service level objectives
+- Three tier architecture
+    1.) Presentation layer
+        - Networking
+    2.) Business Logic
+        - Compute
+    3.) Data layer
+        - Storage
+    4.) Designed logic
+        - Resiliency, scalability, disaster recovery
+    5.) Security
+        - Privacy, Denial of Service
+        - Keeping it online
+    6.) Capacity planning, cost optimization
+    7.) Deployment process - Proactive vs Reactive
+        - Blue vs Green Teams
+        - Canary
+        - Monitor / alert
+        - Rolling updates
+        - Continuous Deployment
+- Tenets
+    1.) Begin simply/ iterate
+    2.) Plan for failure
+    3.) Measure stuff
+- There are no universal solutions, only contextual solutions
+    - Recency bias => new ideas -> overused, create problems
+        - Every tool has a purpose
+
+## State
+- Refers to any action that the system depends on memory of a preceding action
+    - Store state where?
+    - How to retrieve state?
+    - What to do when its lost?
+- State = cornerstone of cloud based design
+    - VS. Stateless
+        - Example:
+            1.) Chef does all the cooking (Job based)
+                - Not scalable
+                - Single point of failure
+                - Limitation
+            2.) Assembly line
+                - Troubleshoot single area
+                - Stateless
+        - Where is the truth in the system?
+            - Central control mechanism = Choke point
+- Best state is no state
+    - Easier to apply more workers
+    - Relocate tasks
+    - More fault tolerant
+- Depends what is state?
+    - Shared document
+    - Object
+    - Key: value (cookies)
+- Critical state
+    - Best way to management/ implement
+    - Hotspots
+        - Push state off of service which rely on them maybe to the backend
+- Cloud Load Balancing -> [FE] [FE] [FE] -> MAP ->  [BE][BE][BE][BE]
+    - Sharded state with replication
+    - Latency
+
+## General solution for large scale cloud based systems
+- Use DNS/ connection load balancer to get requests from users
+- Stateless Frontend
+    - Cloud DNs
+    - HTTPS Load Balancer
+    - Takes control of client request, initate server-server communication
+    - Server discovery
+    - Request balancing
+    - Throttling
+- Network Load Balancer
+- Backend
+    - Servers
+    - DB (Some stateful sharded servers)
+
+## Measurement
+- Identify objectives to compare them against numerical objects
+- Iterative objectives
+- Load testing
+- Bottlenecks
+- Helps makes design choices by testing and validating
+    - Measure during monitoring
+- Service Level Objectives
+    - Key Objectives
+    - Indicators
+        - How to measure?
+        - Context for making decisions
+    - Taking objectives are with measurements on what you are able to achieve
+        - Controlled agreement
+    - SLI/ SLO - quality fo Attribute
+    - SLA - Lawyer speak
