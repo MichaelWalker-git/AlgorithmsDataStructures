@@ -252,6 +252,15 @@ More generous policies overrides (IMPORTANT)
     - VPN on GCP = Software
     - With static routing, updating the tunnel require the additional use of static routes; restart needed to include subnet
 
+## Cloud DNs - 100% SLA
+- API/ Web zone
+- Managed zones
+    - Manages all DNS Records for single domain name
+    - One project may have multiple managed zones
+    - Mut be enabled first
+    - Permissions = project level
+        - Monitor propogation of changes to DNS name services
+
 ## External Peering
 ### Direct Peering - connect any business network to Google
 - Customer doesn't want to use the public internet
@@ -282,6 +291,226 @@ More generous policies overrides (IMPORTANT)
     - Instead of setting up and maintaining a DMZ, the organization can work with a service provider so that their traffic travels on a dedicated link from their systems to Google.
     - With the dedicated link, the organization gets a higher availability and lower latency connection to Google's network.
 
+## Managed Instance Groups
+- Deploys identical instance based on instance template
+    - Load Balancer
+    - Instance crashes/ deletes without Group instance commands
+        - Recreates that same instance name, resumes its tasks
+    - Auto identifies unhealthy instances in a group
+    - Regionally managed zones
+        - Autoscaling
+        - Network Load balancing
+        - HTTPS Load Balancer
+    - Create Instant Template === Easy
+        - Zones, ports, autscale, minumum number, health check
+            - Health check
+                - Specified period
+                - Conditions (if, then)
+                - Consecutive probes
+                - Determines if instance can receive new data connections
+            - Redundant Health checks
+                - Follows your settings
+                - Un-configurable , auto created
+                - Checks more frequently
+    - Auto scales
+        - Add/ deletes instance in peak and lull loads
+    - Downscale
+        - Connection drain
+            - New = Blocked
+            - Old = Closed
+                - Preserves existing sessions until they end
+
+
+# Load Balancers
+## HTTPS Load Balancing
+- Use SSL or use SSL Load Balancing
+- Global Load balancing for HTTP(s) requests destined for your instance
+    - Can configure URL rules to route to one set of instances
+    - Requests are always routed to instance group closest to user
+    - IPV4 / IPV6 - Supported Terminated at Global
+- Balancing mode influenced whether backend instance group at capacity
+    - Load Balancer Tests
+        1.) CPU Utilization
+        2.) Max request per sec. per instance
+        3.) CPU utilization/ rate
+    - Capacity Scaler
+        - Additional setting - directs the load balancer to only direct requests to given backend
+    - Session affinity
+        - One url = one instance
+- URL Maps
+    - Direct traffic to different instances based on incoming URL
+        - Designates which requests to send where
+
+## Cross-Region Load Balancer
+- HTTP/ HTTPS - closest regions, eliminates DNS load balnacer
+    - Multiple region/ zones
+
+## Content Based Load Balancer
+- Create multiple backend services
+- Add path rules
+    - /video
+    - /static
+
+## SSL Proxy/ TCP Proxy
+- Global load balancer - nearest with capacity
+    - Advantages:
+        - Intelligent Routing
+        - Certification management
+        - Better utilization of VM
+        - Security patch
+- TCP
+    - Single IP for all users
+        - Intelligent
+        - Security Patch
+
+## Network Load Balancing
+- Balance load of systems based on IP protocol data
+    - Uses forward rules that point to target pools
+        - List of instances availbe for load balancing
+        - Define what type of health checks
+- Passthrough load balancer
+- Managed Instance group
+    - Target pool can have different instances
+    - Managed pool === all the same typeof VM
+    - Autoscaler
+        - Own rules, do we spin up more VMs within target pool
+- Target pool
+- 50, limit, 1 health check
+- Instance template
+- Session affinity
+    - Affects load distribution
+    - Possible hashes = source/ destination of port
+
+## Internal Load balancing
+- Behind private load balancer/ internal UPC
+
+## Load balancer Best practices
+- Multiple zones in regions, zones are random, rebalance
+- Overprovision; prepare for failure
+    - 150% for full service during an full service outage
+### Autoscaler Best Practices
+    - Don't use maxRate on backend
+    - Don't make autoscaled Managed Instance Group (MIG) the target of 2 different load balancers
+        - Use managed instance groups to create homogeneous groups of instances so that load balancers can direct traffic to more than one VM instance in case a single VM becomes unhealthy.
+
+- Testing
+    - Create failures
+        - Auto Tag with "failure_zone" removed
+    - Do not put one VM connected to two instances
+    - Do not share instance group with two different backends
+    - All instance in the same VPC group
+
+## Autoscaling
+- Instructions manages instance groups
+- Automatically scales the number of instances ina  manged group based on a specified type of workload
+    - Reduces cost because it can shrink the number of instances running
+    - One autoscaler per managed instance group
+    - VM across different multiple zones withina  region
+        - Autoscales those proportionally
+    - One minute windows
+## Policies
+- Multiple policies (max 5)
+    - Falls to one with most VM policy
+- Avg CPU utilization
+- HTTP load balancing servicing capcity target utilization
+    - Max CPU utilization
+    - Max requests per instance/ second
+- Stackdriver standard / custom metrics
+- Example:
+    1.) Instance Template
+    2.) Create managed instance group
+    3.) Create Autoscaler
+    4.) Define multiple policies for autoscaler
+
+## Infrastracture Automation - Consistetn Repeatable Process
+- Base Images (Synchronous) -> Running VM -> Snapshop on Bootdisk
+    - Snapshots are global resources, can't be shared between proejcts
+    - Custom images - between proejcts
+        - OS/ System = custom
+        - Baked => faster to become available, lack app, prevent change
+        - Golden - Setting are just right; ready for sharing
+    - Startup scrips
+        - Boot time configs, persistent environment
+        - Which software to install on the fly
+        - Metadata survives
+    - Instance templates => Identical VMS
+    - Auto Scaler + managed instance groups => Horizontal Scalability
+
+- Images
+    - Import external images
+    - Persistent Disks = zonal
+    - Snapshot -> global
+        - Disk from snapshot => VM
+    - Local VM => Bucket update => start VM from bucket image => ?
+
+- Metadata
+    - Starting VM; visible to all VM in project
+    - Instance hostname
+    - External IP address
+    - Key: value pairs
+
+- Scripts
+    - Startup (Pre)
+    - Shutdown (Post) / BEst effort
+    - Windows (GSS public)
+    - Startup can be run after reboot
+
+### Deployment Manager
+- Infrastrucuture Automation
+    - Chef/ Puppet/ Terraform/ Cloud Formation
+    - Declarative
+    - Hosted
+    - Driven by Discovery/ Swagger
+        - Deployment Manager ‘knows’ about your API server by consuming a swagger 2.0 specification describing your API that you need to provide to it during setup.
+- Configuration
+    - YAML files
+        - Bidirectional (Receives / sends data)
+        - Expanded on server side
+        - 10mb max
+        - Processing power during expansion
+    - Templates can be nested
+        - Isolate function into meaningful files
+        - Create reusable assets
+        - Separate template for firewall rules
+    - Templates have properties
+    - Templates can use environment variables
+    - Support startup scripts/ metadata capacity
+    - Eployments can be updaed using GCP - API
+        - Add / Remove => USE REST
+- How it Deployment manager works:
+    - Completely dependent on API
+    - API for resources must be enabled in API manager
+    - Every property is required by API must be in template
+    - Only supports specific resource types
+
+# Cloud Launcher
+- Marketplace for Past Solutions
+- 3rd party solutions
+- Separate fees for licensing/ usage costs
+
+## Managed services
+- Integerate solution offered as a service
+    - Platform as a service
+        - Dataproc
+            - Spark, Hadoop, Pig
+            - Rapid scaling of clusters
+            - Clusters can preempt VM (cheaper)
+            - Job output
+                - Easy to locate without log files
+        - Dataflow
+            - Data processing service
+            - Batch/ stream processing
+            - online stream ETL processes
+            - SEparate data processsing requirements from data source
+            - Create pipeliens, pcollection, trasnfroms, IO sources, sinks
+                - Pipeline: Series of computations that accept data and transform it out
+                    - Output is a sink
+                - Pcollection
+                    - The Dataflow SDKs use a specialized class called PCollection to represent data in a pipeline. A PCollection represents a multi-element data set.
+                    - You can think of a PCollection as "pipeline" data. Dataflow's transforms use PCollections as inputs and outputs
+                    - Want to work with data in your pipeline, it must be in the form of a PCollection. Each PCollection is owned by a specific Pipeline object, and only that Pipeline object can use it.
+        - Big Query
+            - Interactive analysis
 
 # Cloud Data Storage Options
 ## Cloud Storage
@@ -548,7 +777,14 @@ Virtual Machines
     - Processes: Running, name space, limit by supervisor
 
 ## Containers
-- Package up your application into minimally sized components
+- Package up your application into minimally sized components (unit) separated from OS/ infrastructure
+    - App management (Sandbox)
+        - Containers silo applications from each other unless you explicitly connect them. That means you don't have to worry about conflicting dependencies or resource contention — you set explicit resource limits for each service. Importantly, it's an additional layer of security since your applications aren't running directly on the host operating system.
+
+    - Maintain vendor independence
+    - Write once run everywhere
+    - Workload relocation
+    - Decouple application from dependencies
 - Abstract unnecessary and unimportant details in environment
 - Loose coupling
 - Containers start up quicker, use less resources than Virtual Machines
@@ -557,8 +793,48 @@ Virtual Machines
 - Determines image format
 - Kubernetes uses docker container runtime
 
-## Kubernetes
-- Multi cloud soltion
+## Kubernetes (Greek for Navigate/ Helsman)
+- Multi cloud solution
+    - Framework for container management / automation
+    - Developing rapidly
+        - Run anywhere, autoscaling
+    - Stack driver integration, VPN, IAM
+    - Automate deployment of containers cluster
+        - Phtsical hardware (VM) one master coodinator (API access)
+            - Node (Docker) - Minimum of 3 are recommended
+        - Network Proxy
+            - Secure communication
+        - Kubelet Agent
+            - Managing and scheduling
+    - Kubernetes Master
+        - API management
+            - Handles scheduling, cloud endpoints for cluseter
+        - You do not see management when using Kubernetes Engine
+    - Organized as Pod
+        - Multiple containers, running one at a time
+        - Expose apps thorugh public IPs
+        - Central storage
+            - Load balancing based on labels (key: value)
+            - Pods connected to service by labels
+- Deployment
+    - Define how scaling works based on parameters
+        - Individual nodes [Deployment -> [Pod -> Container][Pod -> Container]]
+    - Cluster Container
+        - [Master | [Node/ VM][Node/ VM][Node/ VM]]
+    - Built in resilience
+    - Minimum of 2 pods at each time
+    - Rolling update
+    - Node pods
+        - Instance groups in kubernetes cluster
+        - Like managed instances
+        - Different zones = different VMS
+        - Kubernetes engine = pool aware
+        - Node pools/ multizone container cluser
+    - Cluster federation
+        - Manage/ deploy in multi-cloud provider/ region
+        - Autoscaler
+- Highly available, hybrid cloud
+- Simplifies process of deployment
 - Container cluster orchestration system
 - Pod: Group of containers networked together with guaranteed network access
     - Help devs build modularity
@@ -575,7 +851,7 @@ Virtual Machines
         - Network
         - Load Balancer
 
-- Build and manage Kubernetes cluser
+- Build and manage Kubernetes cluster
     - Manage, build, delete clusters
     - Resources from compute engine VPC(s)
 - Declarative syntax
@@ -585,6 +861,27 @@ Virtual Machines
 - Built in logging
 - Autonode upgrades
 - To use kubernetes, you need to be able to build kubernetes containers, store images of container
+
+## Google Cloud Container Registry
+- images may be shared
+- Public/ Private container storage
+- Billed for storage/ egress, not per image
+
+| Kubernetes
+1.)  Multicloud on Premises
+2.)  Deep control over orchestration
+
+| Containers
+1.) Use containers when you want absolute control over VM instance but you want the docker image environment
+
+| App Engine Standard
+1.) Very fast scale up
+2.) No docker container
+
+| App Engine Flexible
+1.) Code first, developer focused
+2.) Simpler than Kubernetes
+3..) Logs, traffic abstracted
 
 # Google Cloud Container Builder/ Google Cloud Container Registry
 ## App Engine - Platform as a Service - Scalable Application
@@ -637,6 +934,7 @@ Virtual Machines
 
 # Supporting APIs in two ways
 1.) Cloud Endpoints
+- Expose API for frontend to make use of cloud based app services
 Example: Developing software. One of GCP's backend / backend APIs
     - Only consumed by developers you trust
     - Monitor log its used
@@ -644,7 +942,7 @@ Answer: Cloud Endpoints - cloud console
     - Your choice of language/ client technologies
 
 2.) Apigee Edge (3rd party)
-    - Plaform for making APIs available to your customers
+    - Platform for making APIs available to your customers
     - Partners ind eveloping /managing proxies
     - Bussiness focus: Rate limiter, quotas analytics
 
@@ -662,6 +960,10 @@ Git - own git instance
     - Automatically run/ runtime binaries
 - Create single purpose function that respond to events without server/ runtime
 - You chose what events to watch, and triggers what cloud functionality
+- One API, single piece of Code, limited input
+- Lightweight (Event Actions)
+    - Compute actions for developers to create single purpose, stand alone functions tha trespond to cloud events without the need to amanger a server / runtime environment
+    - Triggered by Pub/Sub, HTTP, Cloud storage
 
 # Problem: Keeping track of environments manually => Lots of work
 - Answer: Deployment Manager - Templates Declaration (infrastracture manager)
@@ -752,11 +1054,24 @@ Git - own git instance
     - Long term storage discount for data > 90 days
 - Real time analysis on petabytes of info
 
+#Application Infrastructure Services
 ## Pub/ Sub
 - Simple foundation for stream analysis
+    - 7 days storage
 - Independent apps to send/ receive message
 - Receive != synchronous
 - At least once delivery. Small chance that it is delivered twice
+    - Publisher, subscriber = Pull/ Push data
+    - PConsumed => Send receipt of "Read" to subscription
+        - Removed Msg from Queue
+- Uses:
+    - Balance workloads in network clusters
+    - Implement async workflow
+    - Distributed Event notification
+    - Refresh distribute caches
+    - Logging to multiple systems
+    - Data stream
+    - Reliability improvement
 - 1,000,000 messages per second; data arrives at high unpredictable rates (IoT as an example)
 - Great integration with GCP platform/ decoupling of services
     - Ex.) Real time personalization in gaming
@@ -838,7 +1153,16 @@ Git - own git instance
 - Fine grained networking policies
 - Projects encompass every service
 - Routes/ firewalls
-- IP, protocol forwarding, loading balancing, cloud DNS , VPN tunnels
+- Allows you to connect an ecosystem of services (VPC networks)
+    - IP, protocol forwarding, loading balancing, cloud DNS , VPN tunnels
+- Advantages
+    - Network latency; public ip suffer higher latent
+    - Network security
+    - Network Cost (Egress Cost)
+    - Internal load balancer
+        - Clients in directly peered networks
+    - Firewalls
+        - Control subnet connections (VM)
 - Networks
     - Default
     - Auto
@@ -856,6 +1180,9 @@ Git - own git instance
     - Google Cloud VPCs let you increase the IP space of any subnets without any workload shutdown or downtime. This gives you flexibility and growth options to meet your needs.
 - Private
     - Get private access to Google services, such as storage, big data, analytics, or machine learning, without having to give your service a public IP address. Configure your application’s front end to receive Internet requests and shield your back-end services from public endpoints, all while being able to access Google Cloud services.
+    - Private Google Access
+        - Enables VM on subnetwork to reach Google APIs/ services
+        - No internet necessary
 - Transparent
     - Use VPC flow logs for near real-time (5-second interval) logging to monitor your deployment for both performance analysis and network forensics. This allows you to keep your deployment running securely and at peak efficiency.
 
@@ -1313,3 +1640,730 @@ Cloud Storage
     - Used for networking (firewall rules)
 - Billing
     - Budget / notifications
+
+# Reliable Cloud infrastructure - Design / Process
+- Defining the service
+    - Rough design
+    - Structured Design
+        - Ask Questions
+    - Measurable
+        - Define goals
+        - Service level objectives
+- Three tier architecture
+    1.) Presentation layer
+        - Networking
+    2.) Business Logic
+        - Compute
+    3.) Data layer
+        - Storage
+    4.) Designed logic
+        - Resiliency, scalability, disaster recovery
+    5.) Security
+        - Privacy, Denial of Service
+        - Keeping it online
+    6.) Capacity planning, cost optimization
+    7.) Deployment process - Proactive vs Reactive
+        - Blue vs Green Teams
+        - Canary
+        - Monitor / alert
+        - Rolling updates
+        - Continuous Deployment
+- Tenets
+    1.) Begin simply/ iterate
+    2.) Plan for failure
+    3.) Measure stuff
+- There are no universal solutions, only contextual solutions
+    - Recency bias => new ideas -> overused, create problems
+        - Every tool has a purpose
+
+## State
+- Refers to any action that the system depends on memory of a preceding action
+    - Store state where?
+    - How to retrieve state?
+    - What to do when its lost?
+- State = cornerstone of cloud based design
+    - VS. Stateless
+        - Example:
+            1.) Chef does all the cooking (Job based)
+                - Not scalable
+                - Single point of failure
+                - Limitation
+            2.) Assembly line
+                - Troubleshoot single area
+                - Stateless
+        - Where is the truth in the system?
+            - Central control mechanism = Choke point
+- Best state is no state
+    - Easier to apply more workers
+    - Relocate tasks
+    - More fault tolerant
+- Depends what is state?
+    - Shared document
+    - Object
+    - Key: value (cookies)
+- Critical state
+    - Best way to management/ implement
+    - Hotspots
+        - Push state off of service which rely on them maybe to the backend
+- Cloud Load Balancing -> [FE] [FE] [FE] -> MAP ->  [BE][BE][BE][BE]
+    - Sharded state with replication
+    - Latency
+
+## General solution for large scale cloud based systems
+- Use DNS/ connection load balancer to get requests from users
+- Stateless Frontend
+    - Cloud DNs
+    - HTTPS Load Balancer
+    - Takes control of client request, initate server-server communication
+    - Server discovery
+    - Request balancing
+    - Throttling
+- Network Load Balancer
+- Backend
+    - Servers
+    - DB (Some stateful sharded servers)
+
+## Measurement
+- Identify objectives to compare them against numerical objects
+- Iterative objectives
+- Load testing
+- Bottlenecks
+- Helps makes design choices by testing and validating
+    - Measure during monitoring
+- Service Level Objectives
+    - Key Objectives
+    - Indicators
+        - How to measure?
+        - Context for making decisions
+    - Taking objectives are with measurements on what you are able to achieve
+        - Controlled agreement
+    - SLI/ SLO - quality fo Attribute
+    - SLA - Lawyer speak
+
+## Service Level Indicators (SLI)
+- Performance
+    - Latency, throughput, offered load
+    - Load shedding, velocity, obtainable, freshness
+- Availability
+    - Uptime, outage duration, reliability
+- Quality
+    - Accuracy correctness
+- Internal state
+    - Queue length
+    - Memory use
+- People
+    - Time to respond
+    - Time to fix
+    - Fraction fixed correctly
+
+## Service Level Objectors (SLO)
+- "Page on Pain" SRE (When humans get involved)
+- Create actionable alerts
+- Business impact involved
+- Understand users; location - latency
+- Freshness of data
+- Gathering requirements
+    - Objective related to measurement indicator
+        - User request/ delivery of results
+    - Asking questions
+        1.) Qualitative Requirements
+            - Why?
+                - Systems needed?
+                - Problem?
+            - Who?
+                - Stakeholders
+                    - Who do they are and not care about?
+                - Who is developing this?
+                    - What is in the scope?
+            - What?
+                - What is in scope?
+                - System needs to do what?
+                - Priorities vs nice to haves?
+            - When?
+                - Do users needs this?
+                - Time/value tradeoffs.
+        2.) Quantitive Requirements
+            - Resources
+                - Time - Data - Users - People - Finance
+            - vs. Restraints
+                - Time
+                    - Operational time constraints
+                    - Cost of downtime
+                - Data
+                    - Cost of data lost
+                    - Data volume
+                    - Throughput
+                    - Freshness
+                    - Groups of data
+                - Users
+                    - Number
+                    - Location
+        3.) Scaling requirements
+            - Growth in scale
+                - Iterative
+                - New solutions need to be able to scale
+            - Limiting factors
+                1.) Who at will limit your app's growth?
+                2.) Which resource constraint are important to pay attention to?
+                3.) How can you design to push pass through these limits?
+        4.) Size requirements
+            - Dimensions
+            - Replication
+            - Rate of change
+
+# Microservice Architecture - method of developing
+- Software application as a suite of independently deployable, small
+- Modular services
+    - Unique process
+    - Communicates well defines lightweight mechanism
+    - Each service contributes to business goals
+- Atomic
+- Single purpose
+- Supports A/B testing
+
+## How does microservice complicate the architecture?
+- Unified Application vs Account manager that has to manage to microservices (deposit and withdrawal microservices)
+    - Microservices should be used when necessary
+        - Atomic unit of functionality
+    - Cloud functions
+        - Managed service
+            - Lightweight compute solutions
+        - Single purpose
+            - Stand alone functions that respond to cloud events wihtout the need to run server/ runtime environment
+        - Not low latency
+        - Serverless
+        - Less configuration for price/ performance
+## Microservice design on Google App Engine
+- Full code isolation, many different languages
+- Executed by HTTP/ RESTful
+- Multiple versions/ services
+    - Shared services separated
+    - One master per project
+    - No local file system
+- Define strong contracts between the various microservices.
+- Allow for independent deployment cycles, including rollback.
+- Facilitate concurrent, A/B release testing on subsystems.
+- Minimize test automation and quality-assurance overhead.
+- Improve clarity of logging and monitoring.
+- Provide fine-grained cost accounting.
+- Increase overall application scalability and reliability.
+- GCP 12 factor support
+    1.) Single codebase
+        - Version control
+        - Cloud shell, great development platform
+    2.) Separate build/ run stated
+        - Build GAE app in cloud shell
+        - Upload to GAE
+    3.) Keep Dev/ staging/ prod => automation
+        - Deployment management tempaltes
+    4.) Explicitly declare/ isolate dependencies
+        - Custom images
+    5.) Store config in environment
+        - Metadata server
+        - GCS - Cloud storage
+    6.) Max Robustness with fast instances
+        - Startup scripts / Graceful shutdowns
+        - Instance templates
+        - Managed instances
+        - Autoscaling
+
+## Mapping compute needs to platform product
+- Where does it get its CPU resources
+    1.) App engine first
+        - Code first, easy to use to create apps, highly available, reliable
+        - Minimize work overhead
+        - Dynamic scale/ reliability
+        - Containers are flexible
+    2.) Containeriation
+    3.) Compute Engine
+- Google Kubernetes (2nd Choice)
+    -  Platform independence
+    - Apps can be containerized
+    - Need processing efficiency
+    - Migrating app from data center
+    - Heavy dependence on OS
+    - Direct hardware access to Local SSD
+    - Hardware performance is the priority
+    - Require to use VM
+- Compute system provisioning
+    - How to acquire new resources / adapt to changing requirments?
+    - Scaling
+        - ie.) 2 cores -> 64 cores
+            - Outage
+            - No rolling updates
+            - End to end latency UP
+    - Autoscaling platform => GAE
+    - VM/ CE !== autoscaling
+
+# Horizontal Scaling
+    - N/3 Recommended
+    - Keep servers simple - Do one thing well
+        - Minimize complexity
+        - Construct simple concise APIs
+        - Define where tasks are separable
+        - Split into separate servers
+    - Prefer small/ stateless servers
+        - Easy to scale; no state to shard / rebalance
+        - Failure = cheap; no state to migrate/ recover
+        - Easy to spot load balance
+        - No hot spotting
+## Design first and dimension later
+### Systematic logical troubleshooting
+1.) Segment, reduce the problem space
+2.) Step through the system manually, in your mind
+3.) Add more monitoring/ logging
+
+### Collaboration/ Communication
+- Five whys?
+- Being Hero => Longer downtimes
+- People != root cause; behavior = problem
+    - Automate / prevent
+
+### Problem: Log files different location -> Single log files
+- Key- value pair system
+- Memcache
+- Cloud datastore
+- (Multiple servers)
+
+- Logging Server, Big Table, Sorted By Timestampe
+- Log data is now segregated - join by session id
+- Python scripts - Chron jobs -> Appends -> Transforms -> Join them by Session IDs
+
+### Data Layer
+- Covers the storage/ retrieval of ata
+    - Includes: Access through SQL/ APIs
+    - Excludes: transport of Data
+    - Data persistent mechanism
+        - Structured/ Unstructured
+            - Access:
+                - Loss of data access is very mportant to userse
+            - Persistence:
+                - Proactive detection/ rapid recovery
+    - Data transaction properties
+        - Consistent
+            - ACID
+                - Atomic
+                - Consistency
+                - Isolation
+                - Durable
+        - Availability
+            - BASE
+                - Basically
+                - Available
+                - Soft state
+                - Extended consistency
+        - Partition tolerance
+### Data integrity
+- Every service has separate data requirements
+    - Users can't distinguish between data loss, corruption/ unavailability
+- Uptime
+    - Proportion of time service is unavailable
+- Latency
+    - Responsiveness
+- Scale
+    - Volume of users/ mix of workloads
+- Velocity
+    - How fast a service can innovate at a reasonable cost
+- Privacy
+    - Data must be destroyed within reasonablectime after user deletes data
+
+### Data Migration/ Ingestion
+- Megamaid (Cloud transfer)
+    - Optimized packet transfers
+- Google Transfer appliance - Ship
+- Storage
+    - Mobile
+        - Firestorm
+    - Cloud
+        - Blob - Cloud Data store
+        - Structured Data
+            - Cloud Data store
+                - noSQL
+                - Cheaper than Big Table (strong transactions)
+            - SQL
+                - mySQL/ postGresSQL
+            - Spanner
+                - Global relational
+                - Consitent but expesnive
+        - Analytics
+            - Big Table
+                - Big throughput streams
+            - Big Query
+                - Big Data storage, known size
+
+### Intermittent Outage
+- Persistent disk cannot keep up with demands
+    - Randomly dropping transactions
+- File system cannt handle millions of images - Object store
+    - Decouple store for unlimited scale
+    - Rewrite code to use APIs vs File system lookup
+    - Have to compromise on read / write latency
+
+### Example New Service Level Objectives
+- Availability = 95.83% ( 23/24 hours)
+    - Indicators: Aggergate servers up / down
+- Utilization of thumnail server = 80% of capacity
+    - CPU Utilization <= 80%
+- Failure to procude thumnail < 0.01%
+    - 100 errors per million
+    - Indicator:
+        - Completion errors at 1 million images/ day
+        - Error budget 3000 errors per minute
+
+## Presentation Layer
+- Flow of data -> system -> User -> Business logic storage service
+- Location in network
+    - Multiple factors = latency vs cost
+    - Load balancer
+        - User traffic to app servicer
+        - Global
+            - HTTP(s), SSL
+            - TCP
+                - intended for non-HTTP traffic
+                - TCP Proxy Load Balancing can be configured as a global load balancing service. With this configuration, you can deploy your instances in multiple regions, and global load balancing automatically directs traffic to the region closest to the user.
+                    - If a region is at capacity, the load balancer automatically directs new connections to another region with available capacity. Existing user connections remain in the current region.
+                - Intelligent routing — the load balancer can route requests to backend locations where there is capacity. In contrast, an L3/L4 load balancer must route to regional backends without paying attention to capacity. Use of smarter routing allows provisioning at N+1 or N+2 instead of x*N.
+
+        - Regional - Network
+        - Internal - Backend
+            - Healthcheck
+        - Location is a significant factor
+
+## Integration with other networks (Direct Connect/ Cloud)
+- GCP - External IP on Load Balancer
+    - Reserve Global IPs for Global LB
+        - Not for regional / zonal
+- Cloud CDN
+    - Globally edge points of precense to cache HTTPs
+        - Load balanced control
+        - Faster delivery, lower cost ( 50% cheaper for egress fees)
+    - Lower network latency
+    - Offload origins
+    - Reduces server requirements
+    - Example design pattern:
+        - GCP
+            - Dev
+            - Prod
+        - Cloud Router
+        - Dedicated Interconnect
+            - Cloud Router interconnect
+        - Direct Connection
+        - Another Cloud
+- Other options
+    - Mesh network or aggregate VPN networks
+- Problems:
+    - Periodic slowdown
+    - Fix problems, not people
+    - Systems, processes, behavior
+    - System stability
+        - Fix what can be fixed
+        - Prevent what can't be fixed
+        - Handle what can't be prevented
+## Always write a report (post mortems)
+- User facing incident
+- Impacted team
+- Draft within 24 hours; Final within 3 business days
+
+## Example Problem: Capacity of system to generate thumnails
+- Problem: Running out of CPU, not linear
+    - Solution: Place a load balancer on the upload part of the process
+        - Network Load balancer -> Thumbnail Servers -> Aggregate (LB) into Data Storage Sever
+
+# Designing fo Resiliency, Scalability, Disaster Recovery
+- Fault tolerate, design as if the world is falling apart around you
+- Quantum mechanic universe
+    - Location of electron moving down semiconductors is purely proablistic
+    - Errors and loss will happen
+- Failure due to loss
+    - People
+        - Review procedure
+        - Escalate
+    - Communicate
+        - Don't asume
+- Single Points of Failure
+    - Hardware
+    - Network Path (Load Balancer)
+    - Data (Replicate)
+
+## Design to avoid single points of failures
+- N +2 (Spare for the spare)
+- Each unit can handle extra load
+- Don't make any single unit too large or have an entire responsiblity on a single server
+- Makes units interchangeable clones
+- Correlated failures; top of rack failures -> Domino effect
+    - Failure Domain
+        - How to avoid
+
+## Failure Due to Overload
+- System crosses into non- linear behavior  -> Memory Disk -> Chain of effect
+- Preventative = Best offense (Design is key)
+- Failure Design
+- Growth
+    - Handle Additional QPS
+- Cascading failure
+    - One dies, subsequent processes moves over to another machine to the point of breakage -> Repeat
+- Design
+    - Monitor safety size
+    - Autoscale early
+    - N + 2
+        - Increase size for failover
+        - SLO/ SLI
+- Fan-in overload failure
+    - Floor of responses = bottleneck
+    - Design to mitigate incast overload behavior
+        - Tree structure
+            - Limits single server fan in
+            - Leaves generated data/ forwards to parent now
+            - Nodes combines data from children, send merged responses to parent
+            - Cost is distributed, bottleneck
+    - Algorithm bakc off for retires
+    - Route dampening
+    - Canary
+        - Early warning system
+
+## Coping with Failure
+- Controlled burn
+    - Planning rotating outages
+- SRE Process
+    - Simulated sessions
+        - Prepare team using simulated failure scenario
+        - Determine cause by investigating monitoring / diagnostics
+    - Present strategies for fixing the problem
+- Incorporate failures into SLO/ SLI
+    - Don't overengineer
+    - User may not differentiate this, address in desnse
+    - Define gap between user expectations to system reliability
+- Meetings
+    - SDLC, review SLOs/ SLI
+    - Analyse / define bias process for :
+        - Network outages
+        - Service outages
+        - Downgraded service
+- Obviation
+    - Part failure = impossible
+- Prevention
+- Detecting/ Monitoring
+- Graceful degradation
+    - Pay for hardware
+- Repair
+- Recover
+
+## Business Continuity
+- Cloud DNS - SLA 100%
+    - Users care about data integrity
+- Reliable recovery with lazy detection
+    - User deletes -> Trash
+    - App deletes
+        - Soft delete for 30 days
+        - App Purge = hard delete
+        - Data === gone -> Backup
+- Restore strategy
+    - Practice with production
+    - Balance with systems unknown weaknesses
+
+## Resilient Design
+- Check health checks
+- Automatically replace instances that have been unavailable or failed
+    - Key Tech:
+        - Startup scripts
+        - Instance groups/ group management
+        - Instance templates
+        - Health checks
+    - understand its role
+    - Configure itself automatically
+    - Discover dependencies
+    - Handle requests automatically
+- Scenario:
+    - Lose a whole zone -> Load balancer -> Redirects traffic
+        - Cloud SQL has a resilient copy
+        - Create snapshots/ reporting -> Google Cloud
+
+## Cloud Functions - Store data in Cloud Storage
+- 12 Factor System
+    1.) Netowrking Load balancer
+        - Backing Services as Attached
+    2.) Export our services via port binding
+        - Network API
+            - Resource Endpoints
+        - Expose Kubernetes
+        - Expose Load Balancers
+    3.) Exposure through Single API, global address
+
+## Out of Service
+- Planning for failure, dealing with failure
+1.) In your design, improved reliability
+2.) Disaster Recovery
+3.) Scalable, resilient design
+
+- Our plan when one zone went down
+    - Appoint one person in charge, rotations
+        - Maintain aggregate log of incident stated responses
+        - Logs => Reports (Raw Data)
+            - Root cause goes into the Play Book
+    - Problem: Thumbnail Service down to Overload
+    - Solutions: Multizones
+
+## DDOS Atacks
+### Cloud CDN
+- Content served from the edge
+- Cache hits insulated the network/ app
+
+### Global load balancer
+- Detect/ drop source port UDP
+- Solves NTP amplification
+- Bandwidth/ connection protection
+
+### TCP / SSL Proxy
+- Drops all UDP flow
+- Solves SYN floods, term TCP connection
+
+### Cloud Network Firewall
+- Filter known bad traffic
+
+### VM traffic throttling
+- 10 GB per VM
+- Network protects VMs against large scale sustained attacks
+
+### Absorbing the attack
+- Scale to absorb the attack
+ - Protection by Google Frontend infrastructure
+    -With Google Cloud Global Load Balancing, the frontend infrastructure which terminates user traffic, automatically scales to absorb certain types of attacks (e.g., SYN floods) before they reach your compute instances.
+ - Anycast-based Load Balancing​:
+    - HTTP(S) Load Balancing and SSL proxy
+    - Enable a single anycast IP to front-end your deployed backend instances in all regions. Normally your user traffic is directed to the closest backend  with capacity;
+    - In the event of a DDoS attack, the additional advantage of this approach is that it increases the surface area to absorb this attack by moving traffic to instances with available capacity in any region where backends are deployed.
+ - Autoscaling​:
+    - When you configure HTTP(S)or SSL Proxy Load Balancing,
+    - Google frontend infrastructure that terminates your user traffic protects your backends. You should also provision sufficient number of instances 2 and/or configure autoscaling to handle spikes in traffic.
+    - In the event of a sudden traffic spike, the load balancing proxy layer will distribute the traffic across all the backends with available capacity. In parallel, the autoscaler ramps up the backends inline with traffic that needs to be handled.
+
+- Isolate your internal traffic from the external world
+    - Deploy instances without public IPs unless necessary.
+    - You can set up a NAT gateway or SSH bastion to limit the number of instances that are exposed to the internet.
+    - Once available, deploy Internal Load Balancing for your internal client instances accessing internally deployed services thereby avoiding exposure to the external world. [Internal LB expected to be available in the second half of 2016.]
+
+## Encrypton/ Key Management
+- KMS Solution
+- Store keys in memory/ stateless
+- Customer management keys
+- Persistent Keys/ VM
+    - Client side encryption -> Send to Google
+    - Disk Encryption
+
+### Dimensions of Capacity and Cost Planning
+- Optimize away resilience = mistake
+
+### Capacity Planning
+- Allow factors make initial decision -> fine time
+- Forecast -> Allocate -> Approve -> Deploy -> Repeat (Monitor)
+- Monitor Growth
+- Predict future demand
+- Plan for feature launches
+- Compare with actual data
+
+### Testing > Tradition
+- Don't mistake launch demand fo stable demand
+    - Remember to include N + 2 servers
+    - Add Headerrom / over estimate to instance estimates
+
+### Instance Overhead Estimations
+- 30 % Cautious Estimations
+- Load Testing
+    - Better estimate for the estimates
+    - OS image - Make 20% diff
+    - Hardware architecture
+        - Specific to zone
+    - OS Firewalls
+        - GCP firewalls might be enough
+
+### Persistent Disks
+- May be constrained by CPU
+- Considered I/O bursts
+- Disk performance scaled with disk size
+
+### Network Capcity
+- 2 GB / CPU Core
+- Internal > External
+
+### Workload Estimation
+- Perfkit benchmarking tools -> Becoming the standard
+    - Originating by google
+    - Efficiency at scale
+- Allocate Forecasting how much capacity
+    - How much resouces is necessary
+    - Yields -> Capacity?
+        - Estimate cacpity requrie for forecasting
+        - Validate estimate with load testing
+        - Calculate resources required based on allocation rates
+
+## Alternates to Hardware
+- Caching
+- Tuning
+- Better Algorithms
+- Alternative Services
+- Test first
+    - ID bottlnecks
+    - Slow, staged alternatives
+        - Dark Launches
+        - Use invitations to stage launch
+
+## Optimize VM Cost
+- VM Dimensioning
+    - Sustained Use
+        - Machine type
+        - Inferred Instance
+        - Committed Use Discount
+        - Preemptive VMs( 80%)
+
+## Optimizing Disk cost
+- How much disk space?
+- VM -> VM Same Zone
+    - Egress Cap
+    - Theoretical cap
+    - Measure!
+- Performance Characteristics
+    - I/O Pattern
+        - Small redo/ write
+    - Configure your instance to optimize storage performance
+
+## Deployment
+- Automate everything
+    - Reliable
+    - Self service
+- Creating checklist
+    - Dependencies
+        - Shared Infrastracture
+        - External
+    - Plan for capacity
+        - Verify overload handling
+        - Procedure
+    - Single point of failure
+    - Security
+        - Verify attack
+    - Rollout plan
+        - Gradual
+        - Staged
+        - Percent of users
+
+### Deployment Manager
+- YAML/ Jinja
+- Resource + Properties
+- Templates
+
+#### Blackbox
+- What users sees
+- Treat logs as event streams
+    - Stack driver
+- Run admin and management
+    - Service account
+    - Stackdriver
+        - Logging, monitoring
+        - Debugging, tracing, error reporting
+
+### Montioring/ alert
+- Monitoring = measurement
+    - Trends, improvements
+    - Whitebox/ blackbox
+    - Individual service (admin) / Customer
+    - Push based metrics
+    - Pull based metrics

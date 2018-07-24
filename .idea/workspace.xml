@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db5bd529-cf7b-4938-9abc-3ae1bc015829" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GCP_Exam_Prep_Notes/Coursera_notes.md" beforeDir="false" afterPath="$PROJECT_DIR$/GCP_Exam_Prep_Notes/Coursera_notes.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -70,8 +71,8 @@
       <file leaf-file-name="Coursera_notes.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GCP_Exam_Prep_Notes/Coursera_notes.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="674">
-              <caret line="258" column="14" lean-forward="true" selection-start-line="258" selection-start-column="14" selection-end-line="258" selection-end-column="14" />
+            <state relative-caret-position="901">
+              <caret line="2339" column="10" selection-start-line="2339" selection-start-column="10" selection-end-line="2339" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -96,6 +97,14 @@
       <find>Cloud Resource Manager</find>
       <find>Interconnect</find>
       <find>VPN</find>
+      <find>Private</find>
+      <find>Cloud DNS</find>
+      <find>Load Balan</find>
+      <find>Load Balancer</find>
+      <find>Pub</find>
+      <find>Cloud End</find>
+      <find>Container Reg</find>
+      <find>Registry</find>
     </findStrings>
     <replaceStrings>
       <replace>-</replace>
@@ -276,12 +285,12 @@
       <workItem from="1502254740009" duration="193000" />
       <workItem from="1531768167426" duration="10852000" />
       <workItem from="1531845602362" duration="14716000" />
-      <workItem from="1532379005939" duration="3502000" />
+      <workItem from="1532379005939" duration="20831000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34677000" />
+    <option name="totallyTimeSpent" value="52006000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="452" y="-1200" width="1920" height="1200" extended-state="0" />
@@ -684,8 +693,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GCP_Exam_Prep_Notes/Coursera_notes.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="674">
-          <caret line="258" column="14" lean-forward="true" selection-start-line="258" selection-start-column="14" selection-end-line="258" selection-end-column="14" />
+        <state relative-caret-position="901">
+          <caret line="2339" column="10" selection-start-line="2339" selection-start-column="10" selection-end-line="2339" selection-end-column="10" />
         </state>
       </provider>
     </entry>
