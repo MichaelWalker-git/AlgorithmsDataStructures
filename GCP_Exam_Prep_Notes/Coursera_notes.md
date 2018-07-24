@@ -477,6 +477,11 @@ More generous policies overrides (IMPORTANT)
     - Support startup scripts/ metadata capacity
     - Eployments can be updaed using GCP - API
         - Add / Remove => USE REST
+- How it Deployment manager works:
+    - Completely dependent on API
+    - API for resources must be enabled in API manager
+    - Every property is required by API must be in template
+    - Only supports specific resource types
 
 # Cloud Launcher
 - Marketplace for Past Solutions
@@ -1734,3 +1739,631 @@ Cloud Storage
         - Controlled agreement
     - SLI/ SLO - quality fo Attribute
     - SLA - Lawyer speak
+
+## Service Level Indicators (SLI)
+- Performance
+    - Latency, throughput, offered load
+    - Load shedding, velocity, obtainable, freshness
+- Availability
+    - Uptime, outage duration, reliability
+- Quality
+    - Accuracy correctness
+- Internal state
+    - Queue length
+    - Memory use
+- People
+    - Time to respond
+    - Time to fix
+    - Fraction fixed correctly
+
+## Service Level Objectors (SLO)
+- "Page on Pain" SRE (When humans get involved)
+- Create actionable alerts
+- Business impact involved
+- Understand users; location - latency
+- Freshness of data
+- Gathering requirements
+    - Objective related to measurement indicator
+        - User request/ delivery of results
+    - Asking questions
+        1.) Qualitative Requirements
+            - Why?
+                - Systems needed?
+                - Problem?
+            - Who?
+                - Stakeholders
+                    - Who do they are and not care about?
+                - Who is developing this?
+                    - What is in the scope?
+            - What?
+                - What is in scope?
+                - System needs to do what?
+                - Priorities vs nice to haves?
+            - When?
+                - Do users needs this?
+                - Time/value tradeoffs.
+        2.) Quantitive Requirements
+            - Resources
+                - Time - Data - Users - People - Finance
+            - vs. Restraints
+                - Time
+                    - Operational time constraints
+                    - Cost of downtime
+                - Data
+                    - Cost of data lost
+                    - Data volume
+                    - Throughput
+                    - Freshness
+                    - Groups of data
+                - Users
+                    - Number
+                    - Location
+        3.) Scaling requirements
+            - Growth in scale
+                - Iterative
+                - New solutions need to be able to scale
+            - Limiting factors
+                1.) Who at will limit your app's growth?
+                2.) Which resource constraint are important to pay attention to?
+                3.) How can you design to push pass through these limits?
+        4.) Size requirements
+            - Dimensions
+            - Replication
+            - Rate of change
+
+# Microservice Architecture - method of developing
+- Software application as a suite of independently deployable, small
+- Modular services
+    - Unique process
+    - Communicates well defines lightweight mechanism
+    - Each service contributes to business goals
+- Atomic
+- Single purpose
+- Supports A/B testing
+
+## How does microservice complicate the architecture?
+- Unified Application vs Account manager that has to manage to microservices (deposit and withdrawal microservices)
+    - Microservices should be used when necessary
+        - Atomic unit of functionality
+    - Cloud functions
+        - Managed service
+            - Lightweight compute solutions
+        - Single purpose
+            - Stand alone functions that respond to cloud events wihtout the need to run server/ runtime environment
+        - Not low latency
+        - Serverless
+        - Less configuration for price/ performance
+## Microservice design on Google App Engine
+- Full code isolation, many different languages
+- Executed by HTTP/ RESTful
+- Multiple versions/ services
+    - Shared services separated
+    - One master per project
+    - No local file system
+- Define strong contracts between the various microservices.
+- Allow for independent deployment cycles, including rollback.
+- Facilitate concurrent, A/B release testing on subsystems.
+- Minimize test automation and quality-assurance overhead.
+- Improve clarity of logging and monitoring.
+- Provide fine-grained cost accounting.
+- Increase overall application scalability and reliability.
+- GCP 12 factor support
+    1.) Single codebase
+        - Version control
+        - Cloud shell, great development platform
+    2.) Separate build/ run stated
+        - Build GAE app in cloud shell
+        - Upload to GAE
+    3.) Keep Dev/ staging/ prod => automation
+        - Deployment management tempaltes
+    4.) Explicitly declare/ isolate dependencies
+        - Custom images
+    5.) Store config in environment
+        - Metadata server
+        - GCS - Cloud storage
+    6.) Max Robustness with fast instances
+        - Startup scripts / Graceful shutdowns
+        - Instance templates
+        - Managed instances
+        - Autoscaling
+
+## Mapping compute needs to platform product
+- Where does it get its CPU resources
+    1.) App engine first
+        - Code first, easy to use to create apps, highly available, reliable
+        - Minimize work overhead
+        - Dynamic scale/ reliability
+        - Containers are flexible
+    2.) Containeriation
+    3.) Compute Engine
+- Google Kubernetes (2nd Choice)
+    -  Platform independence
+    - Apps can be containerized
+    - Need processing efficiency
+    - Migrating app from data center
+    - Heavy dependence on OS
+    - Direct hardware access to Local SSD
+    - Hardware performance is the priority
+    - Require to use VM
+- Compute system provisioning
+    - How to acquire new resources / adapt to changing requirments?
+    - Scaling
+        - ie.) 2 cores -> 64 cores
+            - Outage
+            - No rolling updates
+            - End to end latency UP
+    - Autoscaling platform => GAE
+    - VM/ CE !== autoscaling
+
+# Horizontal Scaling
+    - N/3 Recommended
+    - Keep servers simple - Do one thing well
+        - Minimize complexity
+        - Construct simple concise APIs
+        - Define where tasks are separable
+        - Split into separate servers
+    - Prefer small/ stateless servers
+        - Easy to scale; no state to shard / rebalance
+        - Failure = cheap; no state to migrate/ recover
+        - Easy to spot load balance
+        - No hot spotting
+## Design first and dimension later
+### Systematic logical troubleshooting
+1.) Segment, reduce the problem space
+2.) Step through the system manually, in your mind
+3.) Add more monitoring/ logging
+
+### Collaboration/ Communication
+- Five whys?
+- Being Hero => Longer downtimes
+- People != root cause; behavior = problem
+    - Automate / prevent
+
+### Problem: Log files different location -> Single log files
+- Key- value pair system
+- Memcache
+- Cloud datastore
+- (Multiple servers)
+
+- Logging Server, Big Table, Sorted By Timestampe
+- Log data is now segregated - join by session id
+- Python scripts - Chron jobs -> Appends -> Transforms -> Join them by Session IDs
+
+### Data Layer
+- Covers the storage/ retrieval of ata
+    - Includes: Access through SQL/ APIs
+    - Excludes: transport of Data
+    - Data persistent mechanism
+        - Structured/ Unstructured
+            - Access:
+                - Loss of data access is very mportant to userse
+            - Persistence:
+                - Proactive detection/ rapid recovery
+    - Data transaction properties
+        - Consistent
+            - ACID
+                - Atomic
+                - Consistency
+                - Isolation
+                - Durable
+        - Availability
+            - BASE
+                - Basically
+                - Available
+                - Soft state
+                - Extended consistency
+        - Partition tolerance
+### Data integrity
+- Every service has separate data requirements
+    - Users can't distinguish between data loss, corruption/ unavailability
+- Uptime
+    - Proportion of time service is unavailable
+- Latency
+    - Responsiveness
+- Scale
+    - Volume of users/ mix of workloads
+- Velocity
+    - How fast a service can innovate at a reasonable cost
+- Privacy
+    - Data must be destroyed within reasonablectime after user deletes data
+
+### Data Migration/ Ingestion
+- Megamaid (Cloud transfer)
+    - Optimized packet transfers
+- Google Transfer appliance - Ship
+- Storage
+    - Mobile
+        - Firestorm
+    - Cloud
+        - Blob - Cloud Data store
+        - Structured Data
+            - Cloud Data store
+                - noSQL
+                - Cheaper than Big Table (strong transactions)
+            - SQL
+                - mySQL/ postGresSQL
+            - Spanner
+                - Global relational
+                - Consitent but expesnive
+        - Analytics
+            - Big Table
+                - Big throughput streams
+            - Big Query
+                - Big Data storage, known size
+
+### Intermittent Outage
+- Persistent disk cannot keep up with demands
+    - Randomly dropping transactions
+- File system cannt handle millions of images - Object store
+    - Decouple store for unlimited scale
+    - Rewrite code to use APIs vs File system lookup
+    - Have to compromise on read / write latency
+
+### Example New Service Level Objectives
+- Availability = 95.83% ( 23/24 hours)
+    - Indicators: Aggergate servers up / down
+- Utilization of thumnail server = 80% of capacity
+    - CPU Utilization <= 80%
+- Failure to procude thumnail < 0.01%
+    - 100 errors per million
+    - Indicator:
+        - Completion errors at 1 million images/ day
+        - Error budget 3000 errors per minute
+
+## Presentation Layer
+- Flow of data -> system -> User -> Business logic storage service
+- Location in network
+    - Multiple factors = latency vs cost
+    - Load balancer
+        - User traffic to app servicer
+        - Global
+            - HTTP(s), SSL
+            - TCP
+                - intended for non-HTTP traffic
+                - TCP Proxy Load Balancing can be configured as a global load balancing service. With this configuration, you can deploy your instances in multiple regions, and global load balancing automatically directs traffic to the region closest to the user.
+                    - If a region is at capacity, the load balancer automatically directs new connections to another region with available capacity. Existing user connections remain in the current region.
+                - Intelligent routing — the load balancer can route requests to backend locations where there is capacity. In contrast, an L3/L4 load balancer must route to regional backends without paying attention to capacity. Use of smarter routing allows provisioning at N+1 or N+2 instead of x*N.
+
+        - Regional - Network
+        - Internal - Backend
+            - Healthcheck
+        - Location is a significant factor
+
+## Integration with other networks (Direct Connect/ Cloud)
+- GCP - External IP on Load Balancer
+    - Reserve Global IPs for Global LB
+        - Not for regional / zonal
+- Cloud CDN
+    - Globally edge points of precense to cache HTTPs
+        - Load balanced control
+        - Faster delivery, lower cost ( 50% cheaper for egress fees)
+    - Lower network latency
+    - Offload origins
+    - Reduces server requirements
+    - Example design pattern:
+        - GCP
+            - Dev
+            - Prod
+        - Cloud Router
+        - Dedicated Interconnect
+            - Cloud Router interconnect
+        - Direct Connection
+        - Another Cloud
+- Other options
+    - Mesh network or aggregate VPN networks
+- Problems:
+    - Periodic slowdown
+    - Fix problems, not people
+    - Systems, processes, behavior
+    - System stability
+        - Fix what can be fixed
+        - Prevent what can't be fixed
+        - Handle what can't be prevented
+## Always write a report (post mortems)
+- User facing incident
+- Impacted team
+- Draft within 24 hours; Final within 3 business days
+
+## Example Problem: Capacity of system to generate thumnails
+- Problem: Running out of CPU, not linear
+    - Solution: Place a load balancer on the upload part of the process
+        - Network Load balancer -> Thumbnail Servers -> Aggregate (LB) into Data Storage Sever
+
+# Designing fo Resiliency, Scalability, Disaster Recovery
+- Fault tolerate, design as if the world is falling apart around you
+- Quantum mechanic universe
+    - Location of electron moving down semiconductors is purely proablistic
+    - Errors and loss will happen
+- Failure due to loss
+    - People
+        - Review procedure
+        - Escalate
+    - Communicate
+        - Don't asume
+- Single Points of Failure
+    - Hardware
+    - Network Path (Load Balancer)
+    - Data (Replicate)
+
+## Design to avoid single points of failures
+- N +2 (Spare for the spare)
+- Each unit can handle extra load
+- Don't make any single unit too large or have an entire responsiblity on a single server
+- Makes units interchangeable clones
+- Correlated failures; top of rack failures -> Domino effect
+    - Failure Domain
+        - How to avoid
+
+## Failure Due to Overload
+- System crosses into non- linear behavior  -> Memory Disk -> Chain of effect
+- Preventative = Best offense (Design is key)
+- Failure Design
+- Growth
+    - Handle Additional QPS
+- Cascading failure
+    - One dies, subsequent processes moves over to another machine to the point of breakage -> Repeat
+- Design
+    - Monitor safety size
+    - Autoscale early
+    - N + 2
+        - Increase size for failover
+        - SLO/ SLI
+- Fan-in overload failure
+    - Floor of responses = bottleneck
+    - Design to mitigate incast overload behavior
+        - Tree structure
+            - Limits single server fan in
+            - Leaves generated data/ forwards to parent now
+            - Nodes combines data from children, send merged responses to parent
+            - Cost is distributed, bottleneck
+    - Algorithm bakc off for retires
+    - Route dampening
+    - Canary
+        - Early warning system
+
+## Coping with Failure
+- Controlled burn
+    - Planning rotating outages
+- SRE Process
+    - Simulated sessions
+        - Prepare team using simulated failure scenario
+        - Determine cause by investigating monitoring / diagnostics
+    - Present strategies for fixing the problem
+- Incorporate failures into SLO/ SLI
+    - Don't overengineer
+    - User may not differentiate this, address in desnse
+    - Define gap between user expectations to system reliability
+- Meetings
+    - SDLC, review SLOs/ SLI
+    - Analyse / define bias process for :
+        - Network outages
+        - Service outages
+        - Downgraded service
+- Obviation
+    - Part failure = impossible
+- Prevention
+- Detecting/ Monitoring
+- Graceful degradation
+    - Pay for hardware
+- Repair
+- Recover
+
+## Business Continuity
+- Cloud DNS - SLA 100%
+    - Users care about data integrity
+- Reliable recovery with lazy detection
+    - User deletes -> Trash
+    - App deletes
+        - Soft delete for 30 days
+        - App Purge = hard delete
+        - Data === gone -> Backup
+- Restore strategy
+    - Practice with production
+    - Balance with systems unknown weaknesses
+
+## Resilient Design
+- Check health checks
+- Automatically replace instances that have been unavailable or failed
+    - Key Tech:
+        - Startup scripts
+        - Instance groups/ group management
+        - Instance templates
+        - Health checks
+    - understand its role
+    - Configure itself automatically
+    - Discover dependencies
+    - Handle requests automatically
+- Scenario:
+    - Lose a whole zone -> Load balancer -> Redirects traffic
+        - Cloud SQL has a resilient copy
+        - Create snapshots/ reporting -> Google Cloud
+
+## Cloud Functions - Store data in Cloud Storage
+- 12 Factor System
+    1.) Netowrking Load balancer
+        - Backing Services as Attached
+    2.) Export our services via port binding
+        - Network API
+            - Resource Endpoints
+        - Expose Kubernetes
+        - Expose Load Balancers
+    3.) Exposure through Single API, global address
+
+## Out of Service
+- Planning for failure, dealing with failure
+1.) In your design, improved reliability
+2.) Disaster Recovery
+3.) Scalable, resilient design
+
+- Our plan when one zone went down
+    - Appoint one person in charge, rotations
+        - Maintain aggregate log of incident stated responses
+        - Logs => Reports (Raw Data)
+            - Root cause goes into the Play Book
+    - Problem: Thumbnail Service down to Overload
+    - Solutions: Multizones
+
+## DDOS Atacks
+### Cloud CDN
+- Content served from the edge
+- Cache hits insulated the network/ app
+
+### Global load balancer
+- Detect/ drop source port UDP
+- Solves NTP amplification
+- Bandwidth/ connection protection
+
+### TCP / SSL Proxy
+- Drops all UDP flow
+- Solves SYN floods, term TCP connection
+
+### Cloud Network Firewall
+- Filter known bad traffic
+
+### VM traffic throttling
+- 10 GB per VM
+- Network protects VMs against large scale sustained attacks
+
+### Absorbing the attack
+- Scale to absorb the attack
+ - Protection by Google Frontend infrastructure
+    -With Google Cloud Global Load Balancing, the frontend infrastructure which terminates user traffic, automatically scales to absorb certain types of attacks (e.g., SYN floods) before they reach your compute instances.
+ - Anycast-based Load Balancing​:
+    - HTTP(S) Load Balancing and SSL proxy
+    - Enable a single anycast IP to front-end your deployed backend instances in all regions. Normally your user traffic is directed to the closest backend  with capacity;
+    - In the event of a DDoS attack, the additional advantage of this approach is that it increases the surface area to absorb this attack by moving traffic to instances with available capacity in any region where backends are deployed.
+ - Autoscaling​:
+    - When you configure HTTP(S)or SSL Proxy Load Balancing,
+    - Google frontend infrastructure that terminates your user traffic protects your backends. You should also provision sufficient number of instances 2 and/or configure autoscaling to handle spikes in traffic.
+    - In the event of a sudden traffic spike, the load balancing proxy layer will distribute the traffic across all the backends with available capacity. In parallel, the autoscaler ramps up the backends inline with traffic that needs to be handled.
+
+- Isolate your internal traffic from the external world
+    - Deploy instances without public IPs unless necessary.
+    - You can set up a NAT gateway or SSH bastion to limit the number of instances that are exposed to the internet.
+    - Once available, deploy Internal Load Balancing for your internal client instances accessing internally deployed services thereby avoiding exposure to the external world. [Internal LB expected to be available in the second half of 2016.]
+
+## Encrypton/ Key Management
+- KMS Solution
+- Store keys in memory/ stateless
+- Customer management keys
+- Persistent Keys/ VM
+    - Client side encryption -> Send to Google
+    - Disk Encryption
+
+### Dimensions of Capacity and Cost Planning
+- Optimize away resilience = mistake
+
+### Capacity Planning
+- Allow factors make initial decision -> fine time
+- Forecast -> Allocate -> Approve -> Deploy -> Repeat (Monitor)
+- Monitor Growth
+- Predict future demand
+- Plan for feature launches
+- Compare with actual data
+
+### Testing > Tradition
+- Don't mistake launch demand fo stable demand
+    - Remember to include N + 2 servers
+    - Add Headerrom / over estimate to instance estimates
+
+### Instance Overhead Estimations
+- 30 % Cautious Estimations
+- Load Testing
+    - Better estimate for the estimates
+    - OS image - Make 20% diff
+    - Hardware architecture
+        - Specific to zone
+    - OS Firewalls
+        - GCP firewalls might be enough
+
+### Persistent Disks
+- May be constrained by CPU
+- Considered I/O bursts
+- Disk performance scaled with disk size
+
+### Network Capcity
+- 2 GB / CPU Core
+- Internal > External
+
+### Workload Estimation
+- Perfkit benchmarking tools -> Becoming the standard
+    - Originating by google
+    - Efficiency at scale
+- Allocate Forecasting how much capacity
+    - How much resouces is necessary
+    - Yields -> Capacity?
+        - Estimate cacpity requrie for forecasting
+        - Validate estimate with load testing
+        - Calculate resources required based on allocation rates
+
+## Alternates to Hardware
+- Caching
+- Tuning
+- Better Algorithms
+- Alternative Services
+- Test first
+    - ID bottlnecks
+    - Slow, staged alternatives
+        - Dark Launches
+        - Use invitations to stage launch
+
+## Optimize VM Cost
+- VM Dimensioning
+    - Sustained Use
+        - Machine type
+        - Inferred Instance
+        - Committed Use Discount
+        - Preemptive VMs( 80%)
+
+## Optimizing Disk cost
+- How much disk space?
+- VM -> VM Same Zone
+    - Egress Cap
+    - Theoretical cap
+    - Measure!
+- Performance Characteristics
+    - I/O Pattern
+        - Small redo/ write
+    - Configure your instance to optimize storage performance
+
+## Deployment
+- Automate everything
+    - Reliable
+    - Self service
+- Creating checklist
+    - Dependencies
+        - Shared Infrastracture
+        - External
+    - Plan for capacity
+        - Verify overload handling
+        - Procedure
+    - Single point of failure
+    - Security
+        - Verify attack
+    - Rollout plan
+        - Gradual
+        - Staged
+        - Percent of users
+
+### Deployment Manager
+- YAML/ Jinja
+- Resource + Properties
+- Templates
+
+#### Blackbox
+- What users sees
+- Treat logs as event streams
+    - Stack driver
+- Run admin and management
+    - Service account
+    - Stackdriver
+        - Logging, monitoring
+        - Debugging, tracing, error reporting
+
+### Montioring/ alert
+- Monitoring = measurement
+    - Trends, improvements
+    - Whitebox/ blackbox
+    - Individual service (admin) / Customer
+    - Push based metrics
+    - Pull based metrics
