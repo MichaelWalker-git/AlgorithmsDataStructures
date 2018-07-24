@@ -252,6 +252,15 @@ More generous policies overrides (IMPORTANT)
     - VPN on GCP = Software
     - With static routing, updating the tunnel require the additional use of static routes; restart needed to include subnet
 
+## Cloud DNs - 100% SLA
+- API/ Web zone
+- Managed zones
+    - Manages all DNS Records for single domain name
+    - One project may have multiple managed zones
+    - Mut be enabled first
+    - Permissions = project level
+        - Monitor propogation of changes to DNS name services
+
 ## External Peering
 ### Direct Peering - connect any business network to Google
 - Customer doesn't want to use the public internet
@@ -282,6 +291,221 @@ More generous policies overrides (IMPORTANT)
     - Instead of setting up and maintaining a DMZ, the organization can work with a service provider so that their traffic travels on a dedicated link from their systems to Google.
     - With the dedicated link, the organization gets a higher availability and lower latency connection to Google's network.
 
+## Managed Instance Groups
+- Deploys identical instance based on instance template
+    - Load Balancer
+    - Instance crashes/ deletes without Group instance commands
+        - Recreates that same instance name, resumes its tasks
+    - Auto identifies unhealthy instances in a group
+    - Regionally managed zones
+        - Autoscaling
+        - Network Load balancing
+        - HTTPS Load Balancer
+    - Create Instant Template === Easy
+        - Zones, ports, autscale, minumum number, health check
+            - Health check
+                - Specified period
+                - Conditions (if, then)
+                - Consecutive probes
+                - Determines if instance can receive new data connections
+            - Redundant Health checks
+                - Follows your settings
+                - Un-configurable , auto created
+                - Checks more frequently
+    - Auto scales
+        - Add/ deletes instance in peak and lull loads
+    - Downscale
+        - Connection drain
+            - New = Blocked
+            - Old = Closed
+                - Preserves existing sessions until they end
+
+
+# Load Balancers
+## HTTPS Load Balancing
+- Use SSL or use SSL Load Balancing
+- Global Load balancing for HTTP(s) requests destined for your instance
+    - Can configure URL rules to route to one set of instances
+    - Requests are always routed to instance group closest to user
+    - IPV4 / IPV6 - Supported Terminated at Global
+- Balancing mode influenced whether backend instance group at capacity
+    - Load Balancer Tests
+        1.) CPU Utilization
+        2.) Max request per sec. per instance
+        3.) CPU utilization/ rate
+    - Capacity Scaler
+        - Additional setting - directs the load balancer to only direct requests to given backend
+    - Session affinity
+        - One url = one instance
+- URL Maps
+    - Direct traffic to different instances based on incoming URL
+        - Designates which requests to send where
+
+## Cross-Region Load Balancer
+- HTTP/ HTTPS - closest regions, eliminates DNS load balnacer
+    - Multiple region/ zones
+
+## Content Based Load Balancer
+- Create multiple backend services
+- Add path rules
+    - /video
+    - /static
+
+## SSL Proxy/ TCP Proxy
+- Global load balancer - nearest with capacity
+    - Advantages:
+        - Intelligent Routing
+        - Certification management
+        - Better utilization of VM
+        - Security patch
+- TCP
+    - Single IP for all users
+        - Intelligent
+        - Security Patch
+
+## Network Load Balancing
+- Balance load of systems based on IP protocol data
+    - Uses forward rules that point to target pools
+        - List of instances availbe for load balancing
+        - Define what type of health checks
+- Passthrough load balancer
+- Managed Instance group
+    - Target pool can have different instances
+    - Managed pool === all the same typeof VM
+    - Autoscaler
+        - Own rules, do we spin up more VMs within target pool
+- Target pool
+- 50, limit, 1 health check
+- Instance template
+- Session affinity
+    - Affects load distribution
+    - Possible hashes = source/ destination of port
+
+## Internal Load balancing
+- Behind private load balancer/ internal UPC
+
+## Load balancer Best practices
+- Multiple zones in regions, zones are random, rebalance
+- Overprovision; prepare for failure
+    - 150% for full service during an full service outage
+### Autoscaler Best Practices
+    - Don't use maxRate on backend
+    - Don't make autoscaled Managed Instance Group (MIG) the target of 2 different load balancers
+        - Use managed instance groups to create homogeneous groups of instances so that load balancers can direct traffic to more than one VM instance in case a single VM becomes unhealthy.
+
+- Testing
+    - Create failures
+        - Auto Tag with "failure_zone" removed
+    - Do not put one VM connected to two instances
+    - Do not share instance group with two different backends
+    - All instance in the same VPC group
+
+## Autoscaling
+- Instructions manages instance groups
+- Automatically scales the number of instances ina  manged group based on a specified type of workload
+    - Reduces cost because it can shrink the number of instances running
+    - One autoscaler per managed instance group
+    - VM across different multiple zones withina  region
+        - Autoscales those proportionally
+    - One minute windows
+## Policies
+- Multiple policies (max 5)
+    - Falls to one with most VM policy
+- Avg CPU utilization
+- HTTP load balancing servicing capcity target utilization
+    - Max CPU utilization
+    - Max requests per instance/ second
+- Stackdriver standard / custom metrics
+- Example:
+    1.) Instance Template
+    2.) Create managed instance group
+    3.) Create Autoscaler
+    4.) Define multiple policies for autoscaler
+
+## Infrastracture Automation - Consistetn Repeatable Process
+- Base Images (Synchronous) -> Running VM -> Snapshop on Bootdisk
+    - Snapshots are global resources, can't be shared between proejcts
+    - Custom images - between proejcts
+        - OS/ System = custom
+        - Baked => faster to become available, lack app, prevent change
+        - Golden - Setting are just right; ready for sharing
+    - Startup scrips
+        - Boot time configs, persistent environment
+        - Which software to install on the fly
+        - Metadata survives
+    - Instance templates => Identical VMS
+    - Auto Scaler + managed instance groups => Horizontal Scalability
+
+- Images
+    - Import external images
+    - Persistent Disks = zonal
+    - Snapshot -> global
+        - Disk from snapshot => VM
+    - Local VM => Bucket update => start VM from bucket image => ?
+
+- Metadata
+    - Starting VM; visible to all VM in project
+    - Instance hostname
+    - External IP address
+    - Key: value pairs
+
+- Scripts
+    - Startup (Pre)
+    - Shutdown (Post) / BEst effort
+    - Windows (GSS public)
+    - Startup can be run after reboot
+
+### Deployment Manager
+- Infrastrucuture Automation
+    - Chef/ Puppet/ Terraform/ Cloud Formation
+    - Declarative
+    - Hosted
+    - Driven by Discovery/ Swagger
+        - Deployment Manager ‘knows’ about your API server by consuming a swagger 2.0 specification describing your API that you need to provide to it during setup.
+- Configuration
+    - YAML files
+        - Bidirectional (Receives / sends data)
+        - Expanded on server side
+        - 10mb max
+        - Processing power during expansion
+    - Templates can be nested
+        - Isolate function into meaningful files
+        - Create reusable assets
+        - Separate template for firewall rules
+    - Templates have properties
+    - Templates can use environment variables
+    - Support startup scripts/ metadata capacity
+    - Eployments can be updaed using GCP - API
+        - Add / Remove => USE REST
+
+# Cloud Launcher
+- Marketplace for Past Solutions
+- 3rd party solutions
+- Separate fees for licensing/ usage costs
+
+## Managed services
+- Integerate solution offered as a service
+    - Platform as a service
+        - Dataproc
+            - Spark, Hadoop, Pig
+            - Rapid scaling of clusters
+            - Clusters can preempt VM (cheaper)
+            - Job output
+                - Easy to locate without log files
+        - Dataflow
+            - Data processing service
+            - Batch/ stream processing
+            - online stream ETL processes
+            - SEparate data processsing requirements from data source
+            - Create pipeliens, pcollection, trasnfroms, IO sources, sinks
+                - Pipeline: Series of computations that accept data and transform it out
+                    - Output is a sink
+                - Pcollection
+                    - The Dataflow SDKs use a specialized class called PCollection to represent data in a pipeline. A PCollection represents a multi-element data set.
+                    - You can think of a PCollection as "pipeline" data. Dataflow's transforms use PCollections as inputs and outputs
+                    - Want to work with data in your pipeline, it must be in the form of a PCollection. Each PCollection is owned by a specific Pipeline object, and only that Pipeline object can use it.
+        - Big Query
+            - Interactive analysis
 
 # Cloud Data Storage Options
 ## Cloud Storage
@@ -548,7 +772,14 @@ Virtual Machines
     - Processes: Running, name space, limit by supervisor
 
 ## Containers
-- Package up your application into minimally sized components
+- Package up your application into minimally sized components (unit) separated from OS/ infrastructure
+    - App management (Sandbox)
+        - Containers silo applications from each other unless you explicitly connect them. That means you don't have to worry about conflicting dependencies or resource contention — you set explicit resource limits for each service. Importantly, it's an additional layer of security since your applications aren't running directly on the host operating system.
+
+    - Maintain vendor independence
+    - Write once run everywhere
+    - Workload relocation
+    - Decouple application from dependencies
 - Abstract unnecessary and unimportant details in environment
 - Loose coupling
 - Containers start up quicker, use less resources than Virtual Machines
@@ -557,8 +788,48 @@ Virtual Machines
 - Determines image format
 - Kubernetes uses docker container runtime
 
-## Kubernetes
-- Multi cloud soltion
+## Kubernetes (Greek for Navigate/ Helsman)
+- Multi cloud solution
+    - Framework for container management / automation
+    - Developing rapidly
+        - Run anywhere, autoscaling
+    - Stack driver integration, VPN, IAM
+    - Automate deployment of containers cluster
+        - Phtsical hardware (VM) one master coodinator (API access)
+            - Node (Docker) - Minimum of 3 are recommended
+        - Network Proxy
+            - Secure communication
+        - Kubelet Agent
+            - Managing and scheduling
+    - Kubernetes Master
+        - API management
+            - Handles scheduling, cloud endpoints for cluseter
+        - You do not see management when using Kubernetes Engine
+    - Organized as Pod
+        - Multiple containers, running one at a time
+        - Expose apps thorugh public IPs
+        - Central storage
+            - Load balancing based on labels (key: value)
+            - Pods connected to service by labels
+- Deployment
+    - Define how scaling works based on parameters
+        - Individual nodes [Deployment -> [Pod -> Container][Pod -> Container]]
+    - Cluster Container
+        - [Master | [Node/ VM][Node/ VM][Node/ VM]]
+    - Built in resilience
+    - Minimum of 2 pods at each time
+    - Rolling update
+    - Node pods
+        - Instance groups in kubernetes cluster
+        - Like managed instances
+        - Different zones = different VMS
+        - Kubernetes engine = pool aware
+        - Node pools/ multizone container cluser
+    - Cluster federation
+        - Manage/ deploy in multi-cloud provider/ region
+        - Autoscaler
+- Highly available, hybrid cloud
+- Simplifies process of deployment
 - Container cluster orchestration system
 - Pod: Group of containers networked together with guaranteed network access
     - Help devs build modularity
@@ -575,7 +846,7 @@ Virtual Machines
         - Network
         - Load Balancer
 
-- Build and manage Kubernetes cluser
+- Build and manage Kubernetes cluster
     - Manage, build, delete clusters
     - Resources from compute engine VPC(s)
 - Declarative syntax
@@ -585,6 +856,27 @@ Virtual Machines
 - Built in logging
 - Autonode upgrades
 - To use kubernetes, you need to be able to build kubernetes containers, store images of container
+
+## Google Cloud Container Registry
+- images may be shared
+- Public/ Private container storage
+- Billed for storage/ egress, not per image
+
+| Kubernetes
+1.)  Multicloud on Premises
+2.)  Deep control over orchestration
+
+| Containers
+1.) Use containers when you want absolute control over VM instance but you want the docker image environment
+
+| App Engine Standard
+1.) Very fast scale up
+2.) No docker container
+
+| App Engine Flexible
+1.) Code first, developer focused
+2.) Simpler than Kubernetes
+3..) Logs, traffic abstracted
 
 # Google Cloud Container Builder/ Google Cloud Container Registry
 ## App Engine - Platform as a Service - Scalable Application
@@ -637,6 +929,7 @@ Virtual Machines
 
 # Supporting APIs in two ways
 1.) Cloud Endpoints
+- Expose API for frontend to make use of cloud based app services
 Example: Developing software. One of GCP's backend / backend APIs
     - Only consumed by developers you trust
     - Monitor log its used
@@ -644,7 +937,7 @@ Answer: Cloud Endpoints - cloud console
     - Your choice of language/ client technologies
 
 2.) Apigee Edge (3rd party)
-    - Plaform for making APIs available to your customers
+    - Platform for making APIs available to your customers
     - Partners ind eveloping /managing proxies
     - Bussiness focus: Rate limiter, quotas analytics
 
@@ -662,6 +955,10 @@ Git - own git instance
     - Automatically run/ runtime binaries
 - Create single purpose function that respond to events without server/ runtime
 - You chose what events to watch, and triggers what cloud functionality
+- One API, single piece of Code, limited input
+- Lightweight (Event Actions)
+    - Compute actions for developers to create single purpose, stand alone functions tha trespond to cloud events without the need to amanger a server / runtime environment
+    - Triggered by Pub/Sub, HTTP, Cloud storage
 
 # Problem: Keeping track of environments manually => Lots of work
 - Answer: Deployment Manager - Templates Declaration (infrastracture manager)
@@ -752,11 +1049,24 @@ Git - own git instance
     - Long term storage discount for data > 90 days
 - Real time analysis on petabytes of info
 
+#Application Infrastructure Services
 ## Pub/ Sub
 - Simple foundation for stream analysis
+    - 7 days storage
 - Independent apps to send/ receive message
 - Receive != synchronous
 - At least once delivery. Small chance that it is delivered twice
+    - Publisher, subscriber = Pull/ Push data
+    - PConsumed => Send receipt of "Read" to subscription
+        - Removed Msg from Queue
+- Uses:
+    - Balance workloads in network clusters
+    - Implement async workflow
+    - Distributed Event notification
+    - Refresh distribute caches
+    - Logging to multiple systems
+    - Data stream
+    - Reliability improvement
 - 1,000,000 messages per second; data arrives at high unpredictable rates (IoT as an example)
 - Great integration with GCP platform/ decoupling of services
     - Ex.) Real time personalization in gaming
@@ -838,7 +1148,16 @@ Git - own git instance
 - Fine grained networking policies
 - Projects encompass every service
 - Routes/ firewalls
-- IP, protocol forwarding, loading balancing, cloud DNS , VPN tunnels
+- Allows you to connect an ecosystem of services (VPC networks)
+    - IP, protocol forwarding, loading balancing, cloud DNS , VPN tunnels
+- Advantages
+    - Network latency; public ip suffer higher latent
+    - Network security
+    - Network Cost (Egress Cost)
+    - Internal load balancer
+        - Clients in directly peered networks
+    - Firewalls
+        - Control subnet connections (VM)
 - Networks
     - Default
     - Auto
@@ -856,6 +1175,9 @@ Git - own git instance
     - Google Cloud VPCs let you increase the IP space of any subnets without any workload shutdown or downtime. This gives you flexibility and growth options to meet your needs.
 - Private
     - Get private access to Google services, such as storage, big data, analytics, or machine learning, without having to give your service a public IP address. Configure your application’s front end to receive Internet requests and shield your back-end services from public endpoints, all while being able to access Google Cloud services.
+    - Private Google Access
+        - Enables VM on subnetwork to reach Google APIs/ services
+        - No internet necessary
 - Transparent
     - Use VPC flow logs for near real-time (5-second interval) logging to monitor your deployment for both performance analysis and network forensics. This allows you to keep your deployment running securely and at peak efficiency.
 
