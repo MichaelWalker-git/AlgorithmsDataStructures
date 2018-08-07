@@ -335,3 +335,28 @@ module MODULE {
     var localName: number;
 }
 ```
+
+### Notes
+Inferences: Changing one type declaration to another -> Compiler error
+TS doesn't differentiate between float and int.
+No assigned type means <any>. No advantages.
+
+### Arrays
+let hobbies = ["Cookies", "Sports"];
+Declaration === inference that it should always be an array of strings
+
+*bold*Fix*bold*
+let hobbies: any[] = ["Cooking" , "Sports"]
+
+### Tuples
+let address = ["Superstreet", 99];
+let address: [string, number] = ["Superstreet", 99];
+
+### Enum
+enum Color {
+  Gray,
+  Green,
+  Blue
+}
+
+let myColor: Color = Color.Green;
