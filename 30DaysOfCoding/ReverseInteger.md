@@ -36,3 +36,51 @@ const reverse = function(x) {
 };
 
 ```
+
+```
+const overflowCheck = (val) => {
+    if(val >= 2147483647 || val <= -2147483647) return true;
+}
+/**
+ * @param {number} x
+ * @return {number}
+ */
+var reverse = function(x, result = 0) {
+    if(overflowCheck(x)) return 0;
+
+    while(x !== 0){
+        const rightMost = x % 10;
+        result += rightMost;  
+        x -= rightMost;
+        x /= 10;
+        if(x !== 0){
+          result *= 10;  
+        }
+    }
+    return overflowCheck(result) ? 0 : result;
+};
+```
+
+
+```
+const reverse = function(x) {
+    // Sign function returns the sign of a number, indicating whether the number is positive, negative or zero.
+    const pow = Math.pow(2, 31) * Math.sign(x);
+    let num = '';
+    x = Math.abs(x);
+
+    while(x !== 0) {
+        let remainder = x % 10;
+        x = Math.floor(x / 10);
+        num += String(remainder);
+    }
+
+    num = Number(num) * Math.sign(pow);
+
+    if (pow > 0) {
+        return num < pow - 1 ? num : 0
+    } else {
+        return num > pow ? num : 0
+    }
+};
+```
