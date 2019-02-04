@@ -1,0 +1,54 @@
+##Quick select -
+
+
+Selectopm algorithm to find the kth smallest element in an unordere list. It is related to quicksort sorting algorithm. 
+
+It was also developed by Tony Hoare. Efficient in practice. Good Avg. perf. Poor worst case perf.
+
+Same approach as quicksort:
+
+
+1.) Choosing one element as a pivot. 
+2.) Partition the data in two sets based on the pivot, accordingly as less than or greater than the pivot.
+3.) Instead of recursing on both sides like in quick sort.... you recurse only on one side, the side with the element it is searching for.
+4.) This reduces the average compleixity from O(log n) to O(n); with a worse case scenario of O(n^2)
+
+```
+const findKthSmallest = (nums, k) => {
+  return quickSelect(nums, 0, nums.length -1, k);
+}
+
+
+const quickSelect = (nums, low, hi, k) => {
+  let i = low;
+  let j = low;
+  // Put the nums that are >= pivot to the left
+  // Put the nums that are < pivot to the right
+  for (; j < hi; j++){
+    if(nums[j] >= nums[hi]){
+      swap(nums, i++, j);
+    }
+  }
+  swap(nums, i, j);
+  
+  // Count hte nums that are >= pivot
+  const m = high - i + 1;
+  
+  // Pivot is the smallest!
+  if (m === k) {
+    return nums[i];
+  }
+  
+  // Pivot is too large, so the smallest number must be on the right
+  if(m < k) {
+    return quickSelect(nums, i + 1, hi, k);
+    
+  // Pivot is too small, so the number must be on the left
+  return quickSelect(nums, low, i -1, k- m);
+  
+  };
+  
+ 
+  
+}
+```
