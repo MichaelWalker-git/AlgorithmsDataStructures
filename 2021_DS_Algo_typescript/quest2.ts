@@ -21,7 +21,6 @@ function findHead(
 	return headValueString;
 }
 
-
 const findWord = (arrayKey: Array<string>) => {
 	const valueSet: Set<string> = new Set();
 	const spellingMap: Map<string, string> = new Map();
@@ -31,7 +30,7 @@ const findWord = (arrayKey: Array<string>) => {
 		let [frontPair, backPair] = arrayKey[i].split(">");
 		spellingMap.set(frontPair, backPair);
 		valueSet.add(backPair);
-	};
+	}
 
 	resultString += findHead(spellingMap, valueSet);
 
