@@ -39,7 +39,39 @@ const clearTimeOut = () => {
 //    - It will reset the timer to the original given time
 //    - It will change the Button copy from "Pause" to "Start"
 
+const DEFAULT_TIME = 10
+let time = 0;
+let timex;
+
+const countDownClock = document.getElementById("countdown");
+const startBtn = document.getElementById("start");
+const stopBtn = document.getElementById("stop");
+const resetBtn = document.getElementById("reset");
+
+countDownClock.textContent = DEFAULT_TIME
+
+const startTimer = () => {
+  time = time === 0 ? DEFAULT_TIME : time
+  timex = setTimeout(function () {
+    time--;
+    if(time >= 0){
+      countDownClock.textContent = time;
+        startTimer();
+    }
+  }, 1000);
+}
+
+
+startBtn.addEventListener("click", () => {
+  startTimer()
+})
+
+stopBtn.addEventListener("click", () => {
+  clearTimeout(timex)
+})
+
 resetBtn.addEventListener("click", () => {
-  clearTimeout();
-  currentTime = initialTimer;
+  time = DEFAULT_TIME;
+  countDownClock.textContent = DEFAULT_TIME;
+
 })
